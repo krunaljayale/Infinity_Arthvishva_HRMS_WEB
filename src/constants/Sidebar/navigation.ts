@@ -1,0 +1,107 @@
+import {
+    LayoutDashboard,
+    CalendarCheck,
+    Users,
+    CreditCard,
+    UserCircle,
+    FileText,
+    Clock,
+    GraduationCap,
+    Megaphone,
+    FileArchive,
+    PlaneTakeoff
+} from "lucide-react";
+
+// --- MANAGEMENT STACK (HR & DIRECTOR) ---
+export const DASHBOARD_NAV = [
+    {
+        label: "MAIN MENU",
+        items: [
+            {
+                title: "Overview",
+                url: "/dashboard",
+                icon: LayoutDashboard,
+            },
+            {
+                title: "Attendance",
+                url: "/dashboard/attendance",
+                icon: CalendarCheck,
+            },
+            {
+                title: "Employee Management",
+                url: "/dashboard/employees",
+                icon: Users,
+                requiredRoles: ["HR", "DIRECTOR"],
+            },
+            {
+                title: "Leave Management",
+                url: "/dashboard/leaves",
+                icon: PlaneTakeoff,
+                requiredRoles: ["HR", "DIRECTOR"],
+            },
+            {
+                title: "Payroll & Compensation",
+                url: "/dashboard/payroll",
+                icon: CreditCard,
+                requiredRoles: ["HR", "DIRECTOR"],
+            },
+            {
+                title: "Gurukul Admin",
+                url: "/dashboard/gurukul",
+                icon: GraduationCap,
+                requiredRoles: ["HR", "DIRECTOR"],
+            },
+            {
+                title: "Announcements",
+                url: "/dashboard/announcements",
+                icon: Megaphone,
+                requiredRoles: ["HR", "DIRECTOR"],
+            },
+            {
+                title: "Resignation",
+                url: "/dashboard/resignations",
+                icon: FileArchive,
+                requiredRoles: ["HR", "DIRECTOR"],
+            },
+        ],
+    },
+    {
+        label: "ACCOUNT",
+        items: [
+            {
+                title: "My Profile",
+                url: "/dashboard/profile",
+                icon: UserCircle,
+            },
+        ]
+    }
+];
+
+// --- SELF-SERVICE STACK (STANDARD EMPLOYEE) ---
+export const PORTAL_NAV = [
+    {
+        label: "MY WORKSPACE",
+        items: [
+            {
+                title: "Overview",
+                url: "/portal",
+                icon: LayoutDashboard,
+            },
+            {
+                title: "My Attendance",
+                url: "/portal/attendance",
+                icon: Clock,
+            },
+            {
+                title: "My Payslips",
+                url: "/portal/payslips",
+                icon: FileText,
+            },
+            {
+                title: "My Profile",
+                url: "/portal/profile",
+                icon: UserCircle,
+            },
+        ],
+    }
+];

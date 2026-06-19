@@ -1,0 +1,41 @@
+@import "tailwindcss";
+
+/* 1. Tell Tailwind v4 to trigger 'dark:' utilities when a .dark class is present */
+@custom-variant dark (&:is(.dark *));
+
+@theme {
+  --font-sans: var(--font-montserrat), ui-sans-serif, system-ui, sans-serif;
+
+  --color-brand-blue: #2076C7; 
+  --color-brand-green: #1CADA3;
+
+
+  --color-magenta: #FE02C5;
+  --color-primary: #1A0F1E;
+  --color-secondary: #544B57;
+  --color-lavender: #E6B3FF;
+  --color-white: #FFFFFF;
+  --radius-xl: 1rem;
+  --radius-2xl: 1.5rem;
+}
+
+/* 2. Define your Light Mode variables */
+:root {
+  --color-background: #F7F5F7;
+  --color-text-base: #1A0F1E;
+}
+
+/* #FDEEE9 */
+
+/* 3. Define your Dark Mode variables (Notice we replaced @media with .dark) */
+.dark {
+  --color-background: #0F0B13;
+  --color-text-base: #FFFFFF;
+}
+
+/* 4. Apply the variables */
+body {
+  background-color: var(--color-background);
+  color: var(--color-text-base);
+  font-family: var(--font-sans);
+}
