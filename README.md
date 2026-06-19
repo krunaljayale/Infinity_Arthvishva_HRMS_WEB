@@ -1,4 +1,4 @@
-# 🎓 Student Attendance & Management System
+# 🏢 Infinity Arthvishva HRMS Portal
 
 ![Next.js](https://img.shields.io/badge/Next.js-14-black?style=for-the-badge&logo=next.js)
 ![TypeScript](https://img.shields.io/badge/TypeScript-007ACC?style=for-the-badge&logo=typescript&logoColor=white)
@@ -7,34 +7,34 @@
 ![MongoDB](https://img.shields.io/badge/MongoDB-4EA94B?style=for-the-badge&logo=mongodb&logoColor=white)
 ![Express.js](https://img.shields.io/badge/Express.js-404D59?style=for-the-badge)
 
-A comprehensive web application designed for educational institutions to manage student records, track daily attendance with strict validation logic, manage academic holidays, and handle administrative profiles.
+A comprehensive human resource management web application designed for Infinity Arthvishva to manage employee records, track daily attendance with strict validation logic, manage company holidays and leaves, and handle administrative HR profiles.
 
 ---
 
 ## 🚀 Key Features
 
-### 👨‍🎓 Student Management
-* **Registration:** Register new students with comprehensive personal, academic, and guardian details.
-* **Image Upload:** Integrated **Cloudinary** support for uploading and storing student profile pictures seamlessly.
-* **Profile Editing:** Full control to update student details, including nested data like course info and contact details.
-* **Search & Filter:** Advanced filtering by enrollment status and course, plus instant search by name or roll ID.
+### 👨‍💼 Employee Management
+* **Onboarding & Registration:** Register new employees with comprehensive personal, professional, and emergency contact details.
+* **Image Upload:** Integrated **Cloudinary** support for uploading and storing employee profile pictures seamlessly.
+* **Profile Editing:** Full control to update employee details, including nested data like department assignments and contact information.
+* **Search & Filter:** Advanced filtering by employment status and department, plus instant search by employee name or ID.
 
 ### 📅 Smart Attendance System
 * **Role-Based Access Control (RBAC):**
-    * **Teachers:** Can only mark attendance for **Today**. Past and future dates are strictly locked.
-    * **Super Admins:** Have privileges to edit **Today** and **Past** records (for corrections). Future dates remain locked.
+    * **Employees/Managers:** Can only mark or approve attendance for **Today**. Past and future dates are strictly locked.
+    * **HR Admins:** Have privileges to edit **Today** and **Past** records (for corrections or payroll adjustments). Future dates remain locked.
 * **Timezone Precision:** Implements strict **Indian Standard Time (IST)** logic to prevent timezone discrepancies (e.g., preventing "tomorrow's" attendance from being marked late at night).
-* **Status Tracking:** Mark students as **Present**, **Absent**, or **On Leave**.
+* **Status Tracking:** Mark employees as **Present**, **Absent**, **Half-Day**, or **On Leave**.
 
-### 🗓️ Holiday & Calendar Management
-* **Dynamic Calendar:** Visual representation of holidays and Sundays directly on the attendance dashboard.
-* **Holiday Manager:** Admin interface to add, view, and delete academic holidays.
-* **Safety Checks:** Backend validation prevents the accidental deletion of holidays that have already passed.
+### 🗓️ Leave & Holiday Management
+* **Dynamic Calendar:** Visual representation of company holidays and weekends directly on the attendance dashboard.
+* **Holiday Manager:** HR interface to add, view, and delete corporate holidays.
+* **Safety Checks:** Backend validation prevents the accidental deletion of holidays that have already passed in the financial year.
 
 ### 🛡️ Admin & Security
 * **Profile Management:** Admins can update their personal details (Phone, City, Department).
 * **Security:** Password change functionality protected by JWT authentication.
-* **Dashboard:** Quick analytics overview of total students and specific cohorts.
+* **Dashboard:** Quick analytics overview of total headcount, department distribution, and daily attendance statistics.
 
 ---
 
@@ -52,7 +52,7 @@ A comprehensive web application designed for educational institutions to manage 
 
 ## ⚙️ Environment Variables
 
-To run this project, you will need to add the following environment variables to your `.env` files.
+To run this project, you will need to add the following environment variables to your `.env.local` or `.env` files.
 
 ### Frontend (`.env.local`)
 ```bash
