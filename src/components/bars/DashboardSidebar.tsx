@@ -7,6 +7,7 @@ import Image from "next/image";
 import { Menu, X, LogOut } from "lucide-react";
 import GradientText from "../elements/GradientText";
 import { DASHBOARD_NAV } from "@/constants/Sidebar/navigation";
+import ThemeToggle from "../buttons/ThemeToggle";
 
 export default function DashboardSidebar() {
     const pathname = usePathname();
@@ -75,6 +76,7 @@ export default function DashboardSidebar() {
                     <button onClick={closeMobileMenu} className="md:hidden text-gray-500 hover:text-primary dark:hover:text-white">
                         <X className="w-6 h-6" />
                     </button>
+                    <ThemeToggle />
                 </div>
 
                 {/* Navigation Links */}

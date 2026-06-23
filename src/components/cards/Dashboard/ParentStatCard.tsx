@@ -1,7 +1,7 @@
 "use client";
 
 import { useDashboardStats } from "@/hooks/dashboard-hooks/useDashboardStats";
-import StatCard from "./StatCard";
+import StatCard from "../StatCard";
 
 // 1. Helper function (Kept outside the component to avoid recreation on re-renders)
 const getIconForTitle = (title: string) => {

@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { PieChart } from "lucide-react"; 
+import { PieChart } from "lucide-react";
 import { useDepartmentStats } from "@/hooks/dashboard-hooks/useDepartmentStats";
 
 export default function DepartmentChart() {
@@ -53,7 +53,19 @@ export default function DepartmentChart() {
         <div className="flex flex-col md:flex-row items-center justify-between w-full h-full gap-8 z-10 overflow-y-auto no-scrollbar pb-2">
 
           {/* Legend / List Area */}
-          <div className="w-full md:w-1/2 flex flex-col gap-3 order-2 md:order-1">
+          <div
+            className="w-full md:w-1/2 flex flex-col gap-1.5 order-2 md:order-1 max-h-[240px] overflow-y-auto pl-2
+            /* --- Beautiful Custom Scrollbar --- */
+            [&::-webkit-scrollbar]:w-1.5
+            [&::-webkit-scrollbar-track]:bg-transparent
+            [&::-webkit-scrollbar-thumb]:bg-gray-200
+            dark:[&::-webkit-scrollbar-thumb]:bg-gray-700
+            [&::-webkit-scrollbar-thumb]:rounded-full
+            hover:[&::-webkit-scrollbar-thumb]:bg-gray-300
+            dark:hover:[&::-webkit-scrollbar-thumb]:bg-gray-600
+            transition-colors"
+            style={{ direction: "rtl" }} /* 1. Moves the scrollbar to the left */
+          >
             {chartData.map((item, index) => {
               const isHovered = hoveredIndex === index;
               const isDimmed = hoveredIndex !== null && !isHovered;
@@ -61,8 +73,9 @@ export default function DepartmentChart() {
               return (
                 <div
                   key={item.label}
+                  style={{ direction: "ltr" }} /* 2. Resets the text direction to normal */
                   className={`
-                    group flex items-center justify-between p-3 rounded-2xl cursor-pointer border transition-all duration-300
+                    group flex items-center justify-between py-2 px-3 rounded-xl cursor-pointer border transition-all duration-300
                     ${isHovered
                       ? "bg-gray-50 dark:bg-white/5 border-gray-100 dark:border-white/10 scale-[1.02] shadow-sm"
                       : "bg-transparent border-transparent"
@@ -75,18 +88,18 @@ export default function DepartmentChart() {
                 >
                   <div className="flex items-center gap-3">
                     <span
-                      className="w-3 h-3 rounded-full transition-all duration-300 shadow-sm shrink-0"
+                      className="w-2.5 h-2.5 rounded-full transition-all duration-300 shadow-sm shrink-0"
                       style={{
                         backgroundColor: item.color,
                         boxShadow: isHovered
-                          ? `0 0 10px ${item.color}`
+                          ? `0 0 8px ${item.color}`
                           : "none",
                       }}
                     ></span>
                     <span
-                      className={`text-xs xl:text-sm font-medium transition-colors truncate ${isHovered
-                          ? "text-primary dark:text-white font-bold"
-                          : "text-secondary dark:text-gray-400"
+                      className={`text-xs font-medium transition-colors truncate ${isHovered
+                        ? "text-primary dark:text-white font-bold"
+                        : "text-secondary dark:text-gray-400"
                         }`}
                     >
                       {item.label}
@@ -94,9 +107,9 @@ export default function DepartmentChart() {
                   </div>
 
                   <span
-                    className={`text-sm xl:text-lg font-bold transition-colors shrink-0 ${isHovered
-                        ? "text-primary dark:text-white"
-                        : "text-gray-400 dark:text-gray-600"
+                    className={`text-sm font-bold transition-colors shrink-0 ${isHovered
+                      ? "text-primary dark:text-white"
+                      : "text-gray-400 dark:text-gray-600"
                       }`}
                   >
                     {item.value}

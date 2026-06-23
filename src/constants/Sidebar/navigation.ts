@@ -9,6 +9,7 @@ import {
     GraduationCap,
     Megaphone,
     FileArchive,
+    FileTerminal,
     PlaneTakeoff
 } from "lucide-react";
 
@@ -55,6 +56,12 @@ export const DASHBOARD_NAV = [
                 title: "Announcements",
                 url: "/dashboard/announcements",
                 icon: Megaphone,
+                requiredRoles: ["HR", "DIRECTOR"],
+            },
+            {
+                title: "Complaints",
+                url: "/dashboard/complaints",
+                icon: FileTerminal,
                 requiredRoles: ["HR", "DIRECTOR"],
             },
             {
