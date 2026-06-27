@@ -53,4 +53,5 @@ export const HR_API = {
   APPROVE_LEAVE: (id: string) => `${SERVER_URL}/api/web/hr/leaves/${id}/approve`,
   REJECT_LEAVE: (id: string) => `${SERVER_URL}/api/web/hr/leaves/${id}/reject`,
   GET_HISTORICAL_LEAVES: `${SERVER_URL}/api/web/hr/leaves/historical`,
+  GET_ALL_EMPLOYEES: `${SERVER_URL}/api/web/hr/employees`,
 }

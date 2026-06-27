@@ -1,3 +1,5 @@
+
+
 import React, { ButtonHTMLAttributes } from "react";
 
 interface GradientButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
@@ -18,7 +20,7 @@ export default function GradientButton({
     to = "var(--color-brand-green)",
     direction = "to right",
     className = "",
-    disabled,
+    disabled = false,
     ...props
 }: GradientButtonProps) {
     return (
@@ -31,12 +33,10 @@ export default function GradientButton({
             {...props}
         >
             {/* This absolute div creates a subtle darken/lighten effect on hover 
-        without breaking the underlying dynamic gradient.
-      */}
+                without breaking the underlying dynamic gradient. */}
             <div className="absolute inset-0 bg-black/0 transition-colors duration-300 hover:bg-black/10 dark:hover:bg-white/10" />
 
-            {/* The text needs to be relative with a z-index so it sits above the hover overlay 
-      */}
+            {/* The text needs to be relative with a z-index so it sits above the hover overlay */}
             <span className="relative z-10 flex items-center justify-center gap-2">
                 {children}
             </span>

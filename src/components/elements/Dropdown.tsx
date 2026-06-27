@@ -1,139 +1,103 @@
 "use client";
 
-import { useClickOutside } from "@/hooks/use-click-outside";
-import { cn } from "@/lib/utils";
-import { SetStateActionType } from "@/types/set-state-action-type";
-import {
-  createContext,
-  type PropsWithChildren,
-  useContext,
-  useEffect,
-  useRef,
-} from "react";
+import React, { useState, useRef, useEffect } from 'react';
+import { ChevronDown } from 'lucide-react';
 
-type DropdownContextType = {
-  isOpen: boolean;
-  handleOpen: () => void;
-  handleClose: () => void;
-};
-
-const DropdownContext = createContext<DropdownContextType | null>(null);
-
-function useDropdownContext() {
-  const context = useContext(DropdownContext);
-  if (!context) {
-    throw new Error("useDropdownContext must be used within a Dropdown");
-  }
-  return context;
+// Define the shape of our dropdown options
+export interface DropdownOption {
+  label: string;
+  value: string;
 }
 
-type DropdownProps = {
-  children: React.ReactNode;
-  isOpen: boolean;
-  setIsOpen: SetStateActionType<boolean>;
-};
+interface CustomDropdownProps {
+  options: DropdownOption[];
+  value: string;
+  onChange: (value: string) => void;
+  placeholder?: string;
+  icon?: React.ReactNode; // Optional icon prop (e.g., Lucide icon)
+  className?: string;
+}
 
-export function Dropdown({ children, isOpen, setIsOpen }: DropdownProps) {
-  const triggerRef = useRef<HTMLElement>(null);
+export default function CustomDropdown({
+  options,
+  value,
+  onChange,
+  placeholder = "Select an option",
+  icon,
+  className = ""
+}: CustomDropdownProps) {
+  const [isOpen, setIsOpen] = useState(false);
+  const dropdownRef = useRef<HTMLDivElement>(null);
 
-  const handleKeyDown = (event: React.KeyboardEvent) => {
-    if (event.key === "Escape") {
-      handleClose();
-    }
+  // Find the currently selected option's label to display it
+  const selectedOption = options.find(opt => opt.value === value);
+
+  // Close the dropdown if the user clicks outside of it
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
+        setIsOpen(false);
+      }
+    };
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
+
+  const handleSelect = (optionValue: string) => {
+    onChange(optionValue);
+    setIsOpen(false);
   };
 
-  useEffect(() => {
-    if (isOpen) {
-      triggerRef.current = document.activeElement as HTMLElement;
-
-      document.body.style.pointerEvents = "none";
-    } else {
-      document.body.style.removeProperty("pointer-events");
-
-      setTimeout(() => {
-        triggerRef.current?.focus();
-      }, 0);
-    }
-  }, [isOpen]);
-
-  function handleClose() {
-    setIsOpen(false);
-  }
-
-  function handleOpen() {
-    setIsOpen(true);
-  }
-
   return (
-    <DropdownContext.Provider value={{ isOpen, handleOpen, handleClose }}>
-      <div className="relative" onKeyDown={handleKeyDown}>
-        {children}
-      </div>
-    </DropdownContext.Provider>
-  );
-}
+    <div className={`relative ${className}`} ref={dropdownRef}>
+      {/* The Select Button */}
+      <button
+        type="button"
+        onClick={() => setIsOpen(!isOpen)}
+        className={`
+                    w-full flex items-center justify-between gap-3 
+                    bg-gray-50 dark:bg-gray-900 border 
+                    ${isOpen ? 'border-[#573CFF] ring-2 ring-[#573CFF]/20' : 'border-gray-200 dark:border-gray-700'} 
+                    rounded-xl px-4 py-2.5 text-sm 
+                    transition-all duration-200 focus:outline-none
+                `}
+      >
+        <div className="flex items-center gap-2 text-gray-700 dark:text-gray-300">
+          {/* Render the icon if passed */}
+          {icon && <span className="text-gray-400">{icon}</span>}
+          <span className="truncate">
+            {selectedOption ? selectedOption.label : placeholder}
+          </span>
+        </div>
+        <ChevronDown
+          className={`w-4 h-4 text-gray-400 transition-transform duration-200 ${isOpen ? 'rotate-180 text-[#573CFF]' : ''}`}
+        />
+      </button>
 
-type DropdownContentProps = {
-  align?: "start" | "end" | "center";
-  className?: string;
-  children: React.ReactNode;
-};
-
-export function DropdownContent({
-  children,
-  align = "center",
-  className,
-}: DropdownContentProps) {
-  const { isOpen, handleClose } = useDropdownContext();
-
-  const contentRef = useClickOutside<HTMLDivElement>(() => {
-    if (isOpen) handleClose();
-  });
-
-  if (!isOpen) return null;
-
-  return (
-    <div
-      ref={contentRef}
-      role="menu"
-      aria-orientation="vertical"
-      className={cn(
-        "fade-in-0 zoom-in-95 pointer-events-auto absolute z-99 mt-2 min-w-32 origin-top-right rounded-lg",
-        {
-          "animate-in right-0": align === "end",
-          "left-0": align === "start",
-          "left-1/2 -translate-x-1/2": align === "center",
-        },
-        className,
+      {/* The Dropdown Menu */}
+      {isOpen && (
+        <div className="absolute z-50 w-full mt-2 bg-white dark:bg-gray-800 border border-gray-100 dark:border-gray-700 rounded-xl shadow-xl overflow-hidden py-1 animate-in fade-in slide-in-from-top-2 duration-200">
+          <ul className="max-h-60 overflow-y-auto hide-scrollbar">
+            {options.map((option) => (
+              <li key={option.value}>
+                <button
+                  type="button"
+                  onClick={() => handleSelect(option.value)}
+                  className={`
+                                        w-full text-left px-4 py-2.5 text-sm transition-colors duration-150
+                                        ${value === option.value
+                      ? 'bg-[#573CFF]/10 text-[#573CFF] font-medium'
+                      : 'text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700/50'
+                    }
+                                    `}
+                >
+                  {option.label}
+                </button>
+              </li>
+            ))}
+          </ul>
+        </div>
       )}
-    >
-      {children}
     </div>
   );
-}
-
-type DropdownTriggerProps = React.HTMLAttributes<HTMLButtonElement> & {
-  children: React.ReactNode;
-};
-
-export function DropdownTrigger({ children, className }: DropdownTriggerProps) {
-  const { handleOpen, isOpen } = useDropdownContext();
-
-  return (
-    <button
-      className={className}
-      onClick={handleOpen}
-      aria-expanded={isOpen}
-      aria-haspopup="menu"
-      data-state={isOpen ? "open" : "closed"}
-    >
-      {children}
-    </button>
-  );
-}
-
-export function DropdownClose({ children }: PropsWithChildren) {
-  const { handleClose } = useDropdownContext();
-
-  return <div onClick={handleClose}>{children}</div>;
 }

@@ -78,7 +78,7 @@ export default function AttendancePage() {
       </div>
 
       {/* 3. Conditional Rendering */}
-      <div className="flex-1 w-full bg-white dark:bg-gray-800 rounded-2xl shadow-[0_2px_10px_rgba(0,0,0,0.02)] border border-gray-100 dark:border-gray-700 p-6">
+      <div className="flex-1 w-full bg-whitedark:bg-primary rounded-2xl shadow-[0_2px_10px_rgba(0,0,0,0.02)] border border-gray-100 dark:border-gray-700 p-6">
         {activeTab === "roster" && <LiveRoster />}
         {activeTab === "corrections" && <CorrectionInbox />}
         {activeTab === "historical" && <HistoricalLedger />}
