@@ -99,18 +99,20 @@ export default function HistoricalLedger() {
                                         <div>Out: <span className="font-medium text-primary dark:text-white">{formatTime(row.outTime)}</span></div>
                                     </td>
                                     <td className="px-6 py-4">
-                                        <span className={`px-2.5 py-1 rounded-full text-xs font-semibold ${row.status === 'P' 
-                                            ? 'bg-green-100 text-green-700 dark:bg-green-500/10 dark:text-green-400' 
+                                        <span className={`px-2.5 py-1 rounded-full text-xs font-semibold ${row.status === 'P'
+                                            ? 'bg-green-100 text-green-700 dark:bg-green-500/10 dark:text-green-400'
                                             : row.status === 'A'
-                                            ? 'bg-red-100 text-red-700 dark:bg-red-500/10 dark:text-red-400'
-                                            : 'bg-gray-100 text-gray-700 dark:bg-white/10 dark:text-gray-300'}`}>
+                                                ? 'bg-red-100 text-red-700 dark:bg-red-500/10 dark:text-red-400'
+                                                : row.status === 'Half'
+                                                ? 'bg-blue-100 text-blue-700 dark:bg-blue-500/10 dark:text-blue-400'
+                                                : 'bg-gray-100 text-gray-700 dark:bg-white/10 dark:text-gray-300'}`}>
                                             {row.status}
                                         </span>
                                     </td>
                                     <td className="px-6 py-4 text-right">
                                         <button
                                             onClick={() => modal.setSelectedRecord(row)}
-                                            className="text-primary dark:text-white hover:text-primary/80 dark:hover:text-gray-300 font-medium text-sm transition-colors"
+                                            className="text-primary hover:text-brand-blue cursor-pointer dark:hover:text-brand-blue dark:text-white font-medium text-sm transition-colors"
                                         >
                                             View Details
                                         </button>
@@ -134,7 +136,7 @@ export default function HistoricalLedger() {
                         className="px-2 py-1 border border-gray-200 dark:border-gray-800 rounded-md bg-white dark:bg-primary text-primary dark:text-white focus:outline-none transition-colors"
                     >
                         <option value={10}>10 per page</option>
-                        <option value={20}>20 per page</option>
+                        <option value={31}>31 per page</option>
                         <option value={50}>50 per page</option>
                     </select>
 

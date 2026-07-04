@@ -6,14 +6,23 @@ import EmployeeTable from '@/components/cards/Employee/EmployeeTable';
 import GradientButton from '@/components/buttons/GradientButton';
 import { useEmployeeDirectory } from '@/hooks/employee-hooks/useEmployeeDirectory';
 import PageTitleHeader from '@/components/elements/PageTitleHeader';
+import { useRouter } from 'next/navigation';
+import { DEPARTMENTS } from '@/hooks/employee-hooks/useAddEmployee';
+
 
 export default function EmployeePage() {
+  const router = useRouter();
   const { data, isLoading, error, viewMode, setViewMode, filters, pagination } = useEmployeeDirectory();
+
 
   const handleOpenProfile = (id: string) => {
     console.log("Opening slide-over drawer for employee ID:", id);
     // Set state here to open your slide-over drawer
   };
+
+  const handleNewEmployee = () => {
+    router.push('/dashboard/employees/new');
+  }
 
   return (
     <div className="w-full mx-auto p-6 md:p-8 space-y-8 font-sans">
@@ -22,7 +31,7 @@ export default function EmployeePage() {
           title=" Employee Directory"
           description="Manage team members, roles, and view detailed profiles."
         />
-        <GradientButton onClick={() => console.log('Open Slide-Over Drawer')}>
+        <GradientButton onClick={handleNewEmployee} >
           + Add Employee
         </GradientButton>
       </div>
@@ -49,10 +58,9 @@ export default function EmployeePage() {
             {/* Department Dropdown */}
             <select className="bg-gray-50 dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-xl px-4 py-2.5 text-sm text-gray-700 dark:text-gray-300 focus:outline-none focus:ring-2 focus:ring-[#FFFFF] min-w-[140px] cursor-pointer" onChange={(e) => filters.setDepartment(e.target.value)}>
               <option value="">All Departments</option>
-              <option value="Engineering">Engineering</option>
-              <option value="HR">HR</option>
-              <option value="Sales">Sales</option>
-              <option value="Operations">Operations</option>
+              {DEPARTMENTS.map(dept => (
+                <option key={dept} value={dept}>{dept}</option>
+              ))}
             </select>
 
             {/* Status Dropdown */}
@@ -96,7 +104,7 @@ export default function EmployeePage() {
             ? <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
               {data.map(emp => <EmployeeCard key={emp._id} employee={emp} onClick={() => { }} />)}
             </div>
-            : <EmployeeTable employees={data} onViewProfile={() => { }} />
+            : <EmployeeTable employees={data} />
         )}
 
         <div className="flex flex-col sm:flex-row items-center justify-between text-sm text-secondary dark:text-gray-400 gap-4 mt-6">

@@ -59,9 +59,10 @@ export default function LeaveLedger() {
                 <table className="w-full text-left text-sm text-secondary dark:text-gray-400">
                     <thead className="bg-gray-50 dark:bg-white/5 text-secondary dark:text-gray-400 border-b border-gray-100 dark:border-gray-800 transition-colors whitespace-nowrap">
                         <tr>
-                            <th className="px-6 py-4 font-medium">Applied On</th>
+                            {/* CHANGED: Leave Dates is now the primary column */}
+                            <th className="px-6 py-4 font-medium">Leave Dates</th>
                             <th className="px-6 py-4 font-medium">Employee</th>
-                            <th className="px-6 py-4 font-medium">Leave Type & Dates</th>
+                            <th className="px-6 py-4 font-medium">Application Details</th>
                             <th className="px-6 py-4 font-medium">Overall Status</th>
                             <th className="px-6 py-4 font-medium text-right">Actions</th>
                         </tr>
@@ -74,22 +75,40 @@ export default function LeaveLedger() {
                         ) : (
                             data.map((row) => (
                                 <tr key={row.leaveId} className="hover:bg-gray-50 dark:hover:bg-white/5 transition-colors">
-                                    <td className="px-6 py-4 font-medium text-primary dark:text-white whitespace-nowrap">{formatDate(row.appliedOn)}</td>
+
+                                    {/* COL 1: LEAVE DATES (Bold & Prominent) */}
+                                    <td className="px-6 py-4 whitespace-nowrap">
+                                        <div className="font-bold text-primary dark:text-white text-base">
+                                            {formatDate(row.startDate)}
+                                            {row.startDate !== row.endDate && <span className="text-secondary dark:text-gray-400 font-medium text-sm"> to {formatDate(row.endDate)}</span>}
+                                        </div>
+                                        <div className="text-xs font-semibold text-brand-blue dark:text-blue-400 mt-1 uppercase tracking-wide">
+                                            {row.leaveCategory} • {row.totalDays} Day{row.totalDays > 1 ? 's' : ''} {row.isHalfDay && `(${row.halfDayPeriod})`}
+                                        </div>
+                                    </td>
+
+                                    {/* COL 2: EMPLOYEE INFO */}
                                     <td className="px-6 py-4 min-w-[200px]">
                                         <div className="font-medium text-primary dark:text-white">{row.employeeName}</div>
                                         <div className="text-xs text-secondary dark:text-gray-400">{row.employeeCode} • {row.department}</div>
                                     </td>
-                                    <td className="px-6 py-4 text-xs whitespace-nowrap">
-                                        <div className="font-semibold text-primary dark:text-white mb-0.5">{row.leaveCategory} <span className="text-secondary dark:text-gray-500 font-normal">({row.totalDays} Days)</span></div>
-                                        <div>{formatDate(row.startDate)} <span className="text-secondary dark:text-gray-500 mx-1">to</span> {formatDate(row.endDate)}</div>
+
+                                    {/* COL 3: APPLIED ON (Moved here, smaller text) */}
+                                    <td className="px-6 py-4 text-xs whitespace-nowrap text-secondary dark:text-gray-500">
+                                        Applied on:<br />
+                                        <span className="font-medium text-primary dark:text-gray-300">{formatDate(row.appliedOn)}</span>
                                     </td>
+
+                                    {/* COL 4: STATUS */}
                                     <td className="px-6 py-4">
-                                        <span className={`px-2.5 py-1 rounded-full text-xs font-semibold ${getStatusBadge(row.overallStatus)}`}>
+                                        <span className={`px-3 py-1 rounded-full text-xs font-semibold tracking-wide ${getStatusBadge(row.overallStatus)}`}>
                                             {row.overallStatus}
                                         </span>
                                     </td>
+
+                                    {/* COL 5: ACTIONS */}
                                     <td className="px-6 py-4 text-right">
-                                        <button onClick={() => modal.setSelectedRecord(row)} className="text-primary dark:text-white hover:text-primary/80 dark:hover:text-gray-300 font-medium text-sm transition-colors whitespace-nowrap">
+                                        <button onClick={() => modal.setSelectedRecord(row)} className="hover:text-brand-blue dark:text-blue-400 dark:hover:text-blue-300 font-medium text-sm transition-colors whitespace-nowrap cursor-pointer">
                                             View Details
                                         </button>
                                     </td>

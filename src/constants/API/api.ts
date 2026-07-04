@@ -54,4 +54,8 @@ export const HR_API = {
   REJECT_LEAVE: (id: string) => `${SERVER_URL}/api/web/hr/leaves/${id}/reject`,
   GET_HISTORICAL_LEAVES: `${SERVER_URL}/api/web/hr/leaves/historical`,
   GET_ALL_EMPLOYEES: `${SERVER_URL}/api/web/hr/employees`,
+  GET_SINGLE_EMPLOYEE: `${SERVER_URL}/api/web/hr/employees`,
+  GET_MANAGER_LIST: `${SERVER_URL}/api/web/hr/employees/leadership`,
+  GET_NEW_EMPLOYEE_CODE: `${SERVER_URL}/api/web/hr/employees/new-code`,
+  CREATE_EMPLOYEE: `${SERVER_URL}/api/web/hr/employees/create`,
 }

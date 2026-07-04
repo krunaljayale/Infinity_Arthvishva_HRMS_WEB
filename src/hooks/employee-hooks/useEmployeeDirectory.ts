@@ -7,7 +7,7 @@ export function useEmployeeDirectory() {
     const [department, setDepartment] = useState('');
     const [status, setStatus] = useState('');
     const [page, setPage] = useState(1);
-    const [limit, setLimit] = useState(12);
+    const [limit, setLimit] = useState(10);
 
     // Connect the hook to your existing data fetcher
     const { employees, isLoading, error, meta } = useEmployees(searchQuery, department, status, page, limit);

@@ -26,7 +26,7 @@ export default function GradientButton({
     return (
         <button
             disabled={disabled}
-            className={`relative overflow-hidden rounded-xl px-8 py-3.5 font-bold text-white shadow-lg transition-all duration-300 hover:shadow-xl hover:-translate-y-0.5 active:scale-95 disabled:opacity-60 disabled:cursor-not-allowed disabled:hover:translate-y-0 disabled:active:scale-100 ${className}`}
+            className={`relative overflow-hidden cursor-pointer rounded-xl px-8 py-3.5 font-bold text-white shadow-lg transition-all duration-300 hover:shadow-xl hover:-translate-y-0.5 active:scale-95 disabled:opacity-60 disabled:cursor-not-allowed disabled:hover:translate-y-0 disabled:active:scale-100 ${className}`}
             style={{
                 backgroundImage: `linear-gradient(${direction}, ${from}, ${to})`,
             }}

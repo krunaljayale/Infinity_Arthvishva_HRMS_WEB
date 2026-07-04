@@ -19,6 +19,20 @@
   --radius-2xl: 1.5rem;
 }
 
+@layer utilities {
+  /* Hide spin buttons for Chrome, Safari, Edge, and Opera */
+  .no-spinner::-webkit-outer-spin-button,
+  .no-spinner::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+  }
+
+  /* Hide spin buttons for Firefox */
+  .no-spinner {
+    -moz-appearance: textfield;
+  }
+}
+
 /* 2. Define your Light Mode variables */
 :root {
   --color-background: #F7F5F7;

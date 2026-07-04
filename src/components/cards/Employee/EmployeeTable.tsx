@@ -1,12 +1,28 @@
+import { useState, useEffect, useRef } from 'react';
+import { useRouter } from 'next/navigation';
 import { EmployeeCardTypes } from '@/services/employee.service';
-import { MoreVertical, Edit, UserCircle2 } from 'lucide-react';
+import { MoreVertical, Edit, UserCircle2, Eye } from 'lucide-react';
 
 interface Props {
     employees: EmployeeCardTypes[];
-    onViewProfile: (id: string) => void;
 }
 
-export default function EmployeeTable({ employees, onViewProfile }: Props) {
+export default function EmployeeTable({ employees }: Props) {
+    const router = useRouter();
+    const [activeMenuId, setActiveMenuId] = useState<string | null>(null);
+    const menuRef = useRef<HTMLDivElement | null>(null);
+
+    // Close action dropdown popups automatically if clicking completely outside
+    useEffect(() => {
+        function handleClickOutside(event: MouseEvent) {
+            if (menuRef.current && !menuRef.current.contains(event.target as Node)) {
+                setActiveMenuId(null);
+            }
+        }
+        document.addEventListener("mousedown", handleClickOutside);
+        return () => document.removeEventListener("mousedown", handleClickOutside);
+    }, []);
+
     if (employees.length === 0) {
         return (
             <div className="p-12 text-center bg-gray-50 dark:bg-gray-900 rounded-2xl border border-gray-200 dark:border-gray-700">
@@ -30,7 +46,7 @@ export default function EmployeeTable({ employees, onViewProfile }: Props) {
                     </thead>
                     <tbody className="divide-y divide-gray-100 dark:divide-gray-700">
                         {employees.map((emp) => (
-                            <tr key={emp._id} className="hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-colors">
+                            <tr key={emp._id} className="hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-colorson relative">
                                 <td className="px-6 py-4 flex items-center gap-4">
                                     {emp.profileImageUrl ? (
                                         <img src={emp.profileImageUrl} alt="" className="w-10 h-10 rounded-full object-cover" />
@@ -49,19 +65,51 @@ export default function EmployeeTable({ employees, onViewProfile }: Props) {
                                 </td>
                                 <td className="px-6 py-4">
                                     <span className={`px-3 py-1 rounded-full text-xs font-bold ${emp.status === 'Active'
-                                        ? 'bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400'
-                                        : 'bg-gray-100 text-gray-600 dark:bg-gray-800 dark:text-gray-400'
+                                            ? 'bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400'
+                                            : 'bg-gray-100 text-gray-600 dark:bg-gray-800 dark:text-gray-400'
                                         }`}>
                                         {emp.status}
                                     </span>
                                 </td>
-                                <td className="px-6 py-4 text-right">
+                                <td className="px-6 py-4 text-right relative">
                                     <button
-                                        onClick={() => onViewProfile(emp._id)}
-                                        className="p-2 text-gray-400 hover:text-[#573CFF] transition-colors"
+                                        onClick={(e) => {
+                                            e.stopPropagation();
+                                            setActiveMenuId(activeMenuId === emp._id ? null : emp._id);
+                                        }}
+                                        className="p-2 text-gray-400 hover:text-brand-blue dark:hover:text-white transition-colors rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700"
                                     >
                                         <MoreVertical className="w-5 h-5" />
                                     </button>
+
+                                    {/* Action Popup Popover Dropdown Context */}
+                                    {activeMenuId === emp._id && (
+                                        <div
+                                            ref={menuRef}
+                                            className="absolute right-6 top-12 w-44 bg-white dark:bg-gray-900 border border-gray-100 dark:border-gray-700 rounded-xl shadow-lg py-2 z-50 animate-in fade-in slide-in-from-top-2 duration-150"
+                                        >
+                                            <button
+                                                onClick={() => {
+                                                    setActiveMenuId(null);
+                                                    router.push(`/dashboard/employees/${emp._id}/view`);
+                                                }}
+                                                className="w-full flex items-center gap-3 px-4 py-2.5 text-left text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-800 hover:text-brand-blue transition-colors"
+                                            >
+                                                <Eye className="w-4 h-4 text-gray-400 group-hover:text-brand-blue" />
+                                                View Profile
+                                            </button>
+                                            <button
+                                                onClick={() => {
+                                                    setActiveMenuId(null);
+                                                    router.push(`/dashboard/employees/${emp._id}/edit`);
+                                                }}
+                                                className="w-full flex items-center gap-3 px-4 py-2.5 text-left text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-800 hover:text-brand-blue transition-colors"
+                                            >
+                                                <Edit className="w-4 h-4 text-gray-400 group-hover:text-brand-blue" />
+                                                Edit Profile
+                                            </button>
+                                        </div>
+                                    )}
                                 </td>
                             </tr>
                         ))}

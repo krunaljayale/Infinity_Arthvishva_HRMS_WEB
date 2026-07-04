@@ -28,5 +28,30 @@ export const employeeService = {
         });
 
         return { data: response.data.data, meta: response.data.meta };
+    },
+
+    async getManagerList() {
+        const response = await apiClient.get(HR_API.GET_MANAGER_LIST);
+        return response.data;
+    },
+
+    async getNewEmployeeCode() {
+        const response = await apiClient.get(HR_API.GET_NEW_EMPLOYEE_CODE);
+        return response.data;
+    },
+
+    // Add this inside your employeeService object
+    async createEmployee(formDataPayload: FormData) {
+        const response = await apiClient.post(HR_API.CREATE_EMPLOYEE, formDataPayload, {
+            headers: {
+                'Content-Type': 'multipart/form-data',
+            },
+        });
+        return response.data;
+    },
+
+    async getEmployeeById(id: string) {
+        const response = await apiClient.get(`${HR_API.GET_SINGLE_EMPLOYEE}/${id}`);
+        return response.data;
     }
 };
