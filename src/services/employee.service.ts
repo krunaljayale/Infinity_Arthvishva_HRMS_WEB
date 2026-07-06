@@ -1,5 +1,6 @@
 import { HR_API } from "@/constants/API/api";
 import apiClient from "@/constants/API/client";
+import { logToTerminal } from "@/utils/terminalLogger";
 
 
 export interface EmployeeCardTypes {
@@ -42,10 +43,14 @@ export const employeeService = {
 
     // Add this inside your employeeService object
     async createEmployee(formDataPayload: FormData) {
+
+        // await logToTerminal("Form data payload from frontend: ",formDataPayload)
+
         const response = await apiClient.post(HR_API.CREATE_EMPLOYEE, formDataPayload, {
             headers: {
                 'Content-Type': 'multipart/form-data',
             },
+            timeout: 60000,
         });
         return response.data;
     },
