@@ -58,4 +58,6 @@ export const HR_API = {
   GET_MANAGER_LIST: `${SERVER_URL}/api/web/hr/employees/leadership`,
   GET_NEW_EMPLOYEE_CODE: `${SERVER_URL}/api/web/hr/employees/new-code`,
   CREATE_EMPLOYEE: `${SERVER_URL}/api/web/hr/employees/create`,
+  GET_PAYROLL_LIST: `${SERVER_URL}/api/web/hr/payroll/payrollList`,
+  PROCESS_ALL_ACTIVE_PAYROLL: `${SERVER_URL}/api/web/hr/payroll/process-all-active`,
 }

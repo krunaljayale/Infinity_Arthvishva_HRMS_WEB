@@ -23,10 +23,13 @@ export const useLogin = () => {
         }
 
         // Updated Regex: The '?' makes (HR|DT) optional. 
-        const codeRegex = /^IA(HR|DT)?\d{5}$/;
+        // const codeRegex = /^IA(HR|DT)?\d{5}$/;
+
+        const codeRegex = /^IA(HR|DT)\d{5}$/;
 
         if (!codeRegex.test(employeeCode)) {
-            setError("Invalid code format. Expected: IAHR00001, IADT00001, or IA00141.");
+            // setError("Invalid code format. Expected: IAHR00001, IADT00001, or IA00141.");
+            setError("Invalid code format. Expected: IAHR00001, IADT00001.");
             setLoading(false);
             return;
         }
