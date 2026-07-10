@@ -187,14 +187,14 @@ export default function PayrollDashboard({ currentUserId }: PayrollDashboardProp
                                         {/* <td className="p-4">
                                             <span className={`px-3 py-1 rounded-full text-xs font-bold
                                                 ${slip.status === "Paid" ? "bg-emerald-100 dark:bg-emerald-900/30 text-emerald-700 dark:text-emerald-400" : ""}
-                                                ${slip.status === "Processed" ? "bg-[#573CFF]/10 text-[#573CFF]" : ""}
+                                                ${slip.status === "Processed" ? "bg-brand-blue/10 text-brand-blue" : ""}
                                                 ${slip.status === "Draft" ? "bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-400" : ""}
                                             `}>
                                                 {slip.status}
                                             </span>
                                         </td> */}
                                         {/* <td className="p-4 flex justify-center gap-3 text-gray-400 dark:text-gray-500">
-                                            <button className="hover:text-[#573CFF] p-2 hover:bg-[#573CFF]/10 rounded transition-colors">
+                                            <button className="hover:text-brand-blue p-2 hover:bg-brand-blue/10 rounded transition-colors">
                                                 <Download size={18} />
                                             </button>
                                         </td> */}

@@ -21,7 +21,7 @@ export default function HistoricalLedger() {
                         placeholder="Search employee name or code..."
                         value={filters.searchQuery}
                         onChange={(e) => filters.setSearchQuery(e.target.value)}
-                        className="w-full pl-10 pr-4 py-2 border border-gray-200 dark:border-gray-800 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-primary/50 bg-gray-50 dark:bg-white/5 text-primary dark:text-white placeholder:text-gray-400 dark:placeholder:text-gray-500 transition-colors"
+                        className="w-full pl-10 pr-4 py-2 border border-gray-200 dark:border-gray-800 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-brand-green bg-gray-50 dark:bg-white/5 text-primary dark:text-white placeholder:text-gray-400 dark:placeholder:text-gray-500 transition-colors"
                     />
                     <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-secondary dark:text-gray-400">
                         🔍
@@ -32,20 +32,20 @@ export default function HistoricalLedger() {
                     type="date"
                     value={filters.startDate}
                     onChange={(e) => filters.setStartDate(e.target.value)}
-                    className="w-full px-3 py-2 border border-gray-200 dark:border-gray-800 rounded-lg text-sm bg-gray-50 dark:bg-white/5 text-primary dark:text-white transition-colors"
+                    className="w-full px-3 py-2 border border-gray-200 dark:border-gray-800 rounded-lg text-sm bg-gray-50 dark:bg-white/5 text-primary dark:text-white transition-colors focus:outline-none focus:ring-2 focus:ring-brand-green" 
                 />
 
                 <input
                     type="date"
                     value={filters.endDate}
                     onChange={(e) => filters.setEndDate(e.target.value)}
-                    className="w-full px-3 py-2 border border-gray-200 dark:border-gray-800 rounded-lg text-sm bg-gray-50 dark:bg-white/5 text-primary dark:text-white transition-colors"
+                    className="w-full px-3 py-2 border border-gray-200 dark:border-gray-800 rounded-lg text-sm bg-gray-50 dark:bg-white/5 text-primary dark:text-white transition-colors focus:outline-none focus:ring-2 focus:ring-brand-green"
                 />
 
                 <select
                     value={filters.status}
                     onChange={(e) => filters.setStatus(e.target.value)}
-                    className="w-full px-3 py-2 border border-gray-200 dark:border-gray-800 rounded-lg text-sm bg-gray-50 dark:bg-white/5 text-primary dark:text-white transition-colors"
+                    className="w-full px-3 py-2 border border-gray-200 dark:border-gray-800 rounded-lg text-sm bg-gray-50 dark:bg-white/5 text-primary dark:text-white transition-colors focus:outline-none focus:ring-2 focus:ring-brand-green"
                 >
                     <option value="" className="dark:bg-primary">All Statuses</option>
                     <option value="P" className="dark:bg-primary">Present (P)</option>
@@ -59,7 +59,7 @@ export default function HistoricalLedger() {
                 <select
                     value={filters.department}
                     onChange={(e) => filters.setDepartment(e.target.value)}
-                    className="w-full px-3 py-2 border border-gray-200 dark:border-gray-800 rounded-lg text-sm bg-gray-50 dark:bg-white/5 text-primary dark:text-white transition-colors"
+                    className="w-full px-3 py-2 border border-gray-200 dark:border-gray-800 rounded-lg text-sm bg-gray-50 dark:bg-white/5 text-primary dark:text-white transition-colors focus:outline-none focus:ring-2 focus:ring-brand-green"
                 >
                     <option value="" className="dark:bg-primary">All Departments</option>
                     <option value="IT" className="dark:bg-primary">IT</option>
@@ -70,7 +70,7 @@ export default function HistoricalLedger() {
             </div>
 
             {/* 2. Data Table */}
-            <div className="bg-white dark:bg-primary overflow-x-auto rounded-xl border border-gray-100 dark:border-gray-800 mb-6 flex-1 shadow-sm transition-colors duration-300">
+            <div className="bg-white dark:bg-primary overflow-x-auto rounded-xl border border-gray-100 dark:border-gray-800 mb-6 flex-1 shadow-sm transition-colors duration-300  ">
                 <table className="w-full text-left text-sm text-secondary dark:text-gray-400">
                     <thead className="bg-gray-50 dark:bg-white/5 text-secondary dark:text-gray-400 border-b border-gray-100 dark:border-gray-800 transition-colors">
                         <tr>

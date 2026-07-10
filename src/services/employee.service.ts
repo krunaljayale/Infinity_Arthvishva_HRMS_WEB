@@ -1,6 +1,5 @@
 import { HR_API } from "@/constants/API/api";
 import apiClient from "@/constants/API/client";
-import { logToTerminal } from "@/utils/terminalLogger";
 
 
 export interface EmployeeCardTypes {
@@ -55,8 +54,24 @@ export const employeeService = {
         return response.data;
     },
 
-    async getEmployeeById(id: string) {
-        const response = await apiClient.get(`${HR_API.GET_SINGLE_EMPLOYEE}/${id}`);
+    async getEmployeeById(id: string, fields?: string[]) {
+        let url = `${HR_API.GET_SINGLE_EMPLOYEE}/${id}`;
+
+        if (fields && fields.length > 0) {
+            url += `?fields=${fields.join(',')}`;
+        }
+
+        const response = await apiClient.get(url);
+        return response.data;
+    },
+
+    async updateEmployee(id: string, formDataPayload: FormData) {
+        const response = await apiClient.put(`/api/web/hr/employees/${id}`, formDataPayload, {
+            headers: {
+                'Content-Type': 'multipart/form-data',
+            },
+            timeout: 30000, // Safe buffer window for file updates
+        });
         return response.data;
     }
 };

@@ -12,13 +12,7 @@ import { DEPARTMENTS } from '@/hooks/employee-hooks/useAddEmployee';
 
 export default function EmployeePage() {
   const router = useRouter();
-  const { data, isLoading, error, viewMode, setViewMode, filters, pagination } = useEmployeeDirectory();
-
-
-  const handleOpenProfile = (id: string) => {
-    console.log("Opening slide-over drawer for employee ID:", id);
-    // Set state here to open your slide-over drawer
-  };
+  const { data, isLoading, viewMode, setViewMode, filters, pagination } = useEmployeeDirectory();
 
   const handleNewEmployee = () => {
     router.push('/dashboard/employees/new');
@@ -56,7 +50,7 @@ export default function EmployeePage() {
           <div className="flex items-center gap-3 w-full xl:w-auto overflow-x-auto pb-2 xl:pb-0 hide-scrollbar">
 
             {/* Department Dropdown */}
-            <select className="bg-gray-50 dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-xl px-4 py-2.5 text-sm text-gray-700 dark:text-gray-300 focus:outline-none focus:ring-2 focus:ring-[#FFFFF] min-w-[140px] cursor-pointer" onChange={(e) => filters.setDepartment(e.target.value)}>
+            <select className="px-4 mx-1 py-2 border border-gray-200 dark:border-gray-700 rounded-lg bg-gray-50 dark:bg-gray-800 text-sm focus:outline-none focus:ring-2 focus:ring-brand-green min-w-[140px] cursor-pointer" onChange={(e) => filters.setDepartment(e.target.value)}>
               <option value="">All Departments</option>
               {DEPARTMENTS.map(dept => (
                 <option key={dept} value={dept}>{dept}</option>
@@ -64,7 +58,7 @@ export default function EmployeePage() {
             </select>
 
             {/* Status Dropdown */}
-            <select className="bg-gray-50 dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-xl px-4 py-2.5 text-sm text-gray-700 dark:text-gray-300 focus:outline-none focus:ring-2 focus:ring-[#FFFFF] min-w-[120px] cursor-pointer" onChange={(e) => filters.setStatus(e.target.value)}>
+            <select className="px-4 mx-1 py-2 border border-gray-200 dark:border-gray-700 rounded-lg bg-gray-50 dark:bg-gray-800 text-sm focus:outline-none focus:ring-2 focus:ring-brand-green min-w-[140px] cursor-pointer" onChange={(e) => filters.setStatus(e.target.value)}>
               <option value="">All Statuses</option>
               <option value="Active">Active</option>
               <option value="Inactive">Inactive</option>

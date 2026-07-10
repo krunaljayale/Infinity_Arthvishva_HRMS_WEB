@@ -13,7 +13,7 @@ export default function RecentJoinedEmployees() {
         <h3 className="text-lg font-bold text-primary dark:text-white">
           Recently Joined
         </h3>
-        <span className="text-xs font-bold text-magenta bg-magenta/10 dark:bg-magenta/10 px-2 py-1 rounded-md">
+        <span className="text-xs font-bold text-brand-blue px-2 py-1 rounded-md">
           New Hires
         </span>
       </div>

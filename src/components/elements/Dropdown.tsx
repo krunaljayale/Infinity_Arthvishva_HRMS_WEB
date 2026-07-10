@@ -57,7 +57,7 @@ export default function CustomDropdown({
         className={`
                     w-full flex items-center justify-between gap-3 
                     bg-gray-50 dark:bg-gray-900 border 
-                    ${isOpen ? 'border-[#573CFF] ring-2 ring-[#573CFF]/20' : 'border-gray-200 dark:border-gray-700'} 
+                    ${isOpen ? 'border-brand-blue ring-2 ring-brand-blue/20' : 'border-gray-200 dark:border-gray-700'} 
                     rounded-xl px-4 py-2.5 text-sm 
                     transition-all duration-200 focus:outline-none
                 `}
@@ -70,7 +70,7 @@ export default function CustomDropdown({
           </span>
         </div>
         <ChevronDown
-          className={`w-4 h-4 text-gray-400 transition-transform duration-200 ${isOpen ? 'rotate-180 text-[#573CFF]' : ''}`}
+          className={`w-4 h-4 text-gray-400 transition-transform duration-200 ${isOpen ? 'rotate-180 text-brand-blue' : ''}`}
         />
       </button>
 
@@ -86,7 +86,7 @@ export default function CustomDropdown({
                   className={`
                                         w-full text-left px-4 py-2.5 text-sm transition-colors duration-150
                                         ${value === option.value
-                      ? 'bg-[#573CFF]/10 text-[#573CFF] font-medium'
+                      ? 'bg-brand-blue/10 text-brand-blue font-medium'
                       : 'text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700/50'
                     }
                                     `}

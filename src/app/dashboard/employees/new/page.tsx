@@ -5,6 +5,7 @@ import { FileInputField, FormInput, FormSelect } from '@/components/elements/For
 import GradientButton from '@/components/buttons/GradientButton';
 import { useAddEmployee } from '@/hooks/employee-hooks/useAddEmployee';
 import { DEPARTMENTS, GRADUATION_COURSES, POSITIONS, POST_GRADUATION_COURSES } from '@/hooks/employee-hooks/useAddEmployee';
+import { ArrowLeft } from 'lucide-react';
 
 export default function AddEmployeePage() {
     // Destructure everything from our new custom hook
@@ -17,7 +18,8 @@ export default function AddEmployeePage() {
         handleAddressChange,
         handleFileChange,
         handleSyncAddresses,
-        handleSubmit
+        handleSubmit,
+        handleBack,
     } = useAddEmployee();
 
     return (
@@ -27,6 +29,13 @@ export default function AddEmployeePage() {
                 description="Add new team members, roles, and view detailed profiles."
             />
 
+            <button
+                onClick={handleBack}
+                className="flex items-center gap-2 text-sm font-medium text-gray-500 hover:text-gray-800 dark:hover:text-white transition-colors cursor-pointer"
+            >
+                <ArrowLeft className="w-4 h-4" /> Back to List
+            </button>
+
             <form onSubmit={handleSubmit} className="mt-6 w-full mx-auto bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-2xl shadow-sm p-8 space-y-10">
 
                 {/* 1. Basic Details */}
@@ -35,10 +44,10 @@ export default function AddEmployeePage() {
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
                         <FormInput name="employeeCode" label="Employee Code" value={formData.employeeCode} onChange={handleChange} disabled textTransform="uppercase" required />
                         <FormInput name="name" label="Full Name" value={formData.name} onChange={handleChange} error={errors.name} textTransform="capitalize" placeholder="John Doe" required />
-                        <FormInput name="email" label="Email Address" type="email" value={formData.email} onChange={handleChange} error={errors.email} textTransform="lowercase" placeholder="user@example.com" required/>
-                        <FormInput name="mobileNumber" label="Mobile Number" value={formData.mobileNumber} onChange={handleChange} error={errors.mobileNumber} placeholder='9876543210' required/>
+                        <FormInput name="email" label="Email Address" type="email" value={formData.email} onChange={handleChange} error={errors.email} textTransform="lowercase" placeholder="user@example.com" required />
+                        <FormInput name="mobileNumber" label="Mobile Number" value={formData.mobileNumber} onChange={handleChange} error={errors.mobileNumber} placeholder='9876543210' required />
                         <FormInput name="alternateMobileNumber" label="Alternate Mobile Number" value={formData.alternateMobileNumber} onChange={handleChange} error={errors.alternateMobileNumber} placeholder='9876543210' />
-                        <FormInput name="password" label="Password" type="password" value={formData.password} onChange={handleChange} error={errors.password} textTransform="none" placeholder="******"  required/>
+                        <FormInput name="password" label="Password" type="password" value={formData.password} onChange={handleChange} error={errors.password} textTransform="none" placeholder="******" required />
                         <FormInput name="confirmPassword" label="Confirm Password" type="password" value={formData.confirmPassword} onChange={handleChange} error={errors.confirmPassword} textTransform="none" placeholder="******" required />
                     </div>
                 </section>
@@ -48,7 +57,7 @@ export default function AddEmployeePage() {
                     <h3 className="text-lg font-bold text-gray-800 dark:text-gray-200 mb-4 border-b border-gray-200 dark:border-gray-700 pb-2">Personal Details</h3>
                     <div className="grid grid-cols-1 md:grid-cols-4 gap-5 mb-6">
                         <FileInputField label="Profile Photo" onChange={(e) => handleFileChange(e, 'profileImage')} />
-                        <FormSelect name="gender" label="Gender" error={errors.gender} value={formData.gender} onChange={handleChange} options={[{ label: 'Male', value: 'Male' }, { label: 'Female', value: 'Female' }, { label: 'Other', value: 'Other' }]} required/>
+                        <FormSelect name="gender" label="Gender" error={errors.gender} value={formData.gender} onChange={handleChange} options={[{ label: 'Male', value: 'Male' }, { label: 'Female', value: 'Female' }, { label: 'Other', value: 'Other' }]} required />
                         <FormInput name="fatherName" label="Father's Name" value={formData.fatherName} onChange={handleChange} placeholder="John Doe" />
                         <FormInput name="motherName" label="Mother's Name" value={formData.motherName} onChange={handleChange} placeholder="Jane Doe" />
                         <FormInput name="dateOfBirth" label="Date of Birth" error={errors.dateOfBirth} type="date" value={formData.dateOfBirth} onChange={handleChange} textTransform="none" required />
@@ -69,7 +78,7 @@ export default function AddEmployeePage() {
                     </div>
 
                     <div className="flex items-center space-x-2 my-5 p-3 bg-gray-50 dark:bg-gray-800 rounded-lg border border-gray-100 dark:border-gray-700">
-                        <input type="checkbox" id="syncAddress" onChange={handleSyncAddresses} className="w-4 h-4 rounded border-gray-300 dark:border-gray-600 dark:bg-gray-700 text-[#573CFF] focus:ring-[#573CFF]" />
+                        <input type="checkbox" id="syncAddress" onChange={handleSyncAddresses} className="w-4 h-4 rounded border-gray-300 dark:border-gray-600 dark:bg-gray-700 text-brand-blue focus:ring-brand-blue" />
                         <label htmlFor="syncAddress" className="text-sm font-medium text-gray-700 dark:text-gray-300 cursor-pointer">Permanent address same as current address</label>
                     </div>
 
@@ -78,7 +87,7 @@ export default function AddEmployeePage() {
                         <div className="md:col-span-2">
                             <FormInput name="permanentAddress" label="Street Address" error={errors.permanentAddress} value={formData.address.permanent.address} onChange={(e) => handleAddressChange('permanent', 'address', e.target.value)} textTransform="none" placeholder='123, Street Name/Village Name' required />
                         </div>
-                        <FormInput name="permanentPin" label="Pin Code" error={errors.permanentPin} value={formData.address.permanent.pinCode} onChange={(e) => handleAddressChange('permanent', 'pinCode', e.target.value)} placeholder='123456' type="number" required/>
+                        <FormInput name="permanentPin" label="Pin Code" error={errors.permanentPin} value={formData.address.permanent.pinCode} onChange={(e) => handleAddressChange('permanent', 'pinCode', e.target.value)} placeholder='123456' type="number" required />
                         <FormInput name="permanentState" label="State" error={errors.permanentState} value={formData.address.permanent.state} onChange={(e) => handleAddressChange('permanent', 'state', e.target.value)} placeholder='State Name' required />
                         <FormInput name="permanentDistrict" label="District" error={errors.permanentDistrict} value={formData.address.permanent.district} onChange={(e) => handleAddressChange('permanent', 'district', e.target.value)} placeholder='District Name' required />
                         <FormInput name="permanentCity" label="City" error={errors.permanentCity} value={formData.address.permanent.city} onChange={(e) => handleAddressChange('permanent', 'city', e.target.value)} placeholder='City Name' required />
@@ -129,7 +138,7 @@ export default function AddEmployeePage() {
                     <h3 className="text-lg font-bold text-gray-800 dark:text-gray-200 mb-4 border-b border-gray-200 dark:border-gray-700 pb-2">Job Details</h3>
                     <div className="grid grid-cols-1 md:grid-cols-4 gap-5">
                         <FormInput name="joiningDate" label="Joining Date" error={errors.joiningDate} type="date" value={formData.joiningDate} onChange={handleChange} textTransform="none" required />
-                        <FormSelect name="department" label="Department" error={errors.department} value={formData.department} onChange={handleChange} options={DEPARTMENTS.map(d => ({ label: d, value: d }))} required/>
+                        <FormSelect name="department" label="Department" error={errors.department} value={formData.department} onChange={handleChange} options={DEPARTMENTS.map(d => ({ label: d, value: d }))} required />
                         <FormSelect name="position" label="Position" error={errors.position} value={formData.position} onChange={handleChange} options={POSITIONS.map(p => ({ label: p, value: p }))} required />
                         <FormSelect name="managerId" label="Reporting Manager" error={errors.managerId} value={formData.managerId} onChange={handleChange} options={managerOptions} required />
                         <FormInput name="salary" label="Base Salary (₹)" error={errors.salary} type="number" value={formData.salary} onChange={handleChange} textTransform="none" placeholder='30000' required />
@@ -190,9 +199,9 @@ export default function AddEmployeePage() {
                 <section>
                     <h3 className="text-lg font-bold text-gray-800 dark:text-gray-200 mb-4 border-b border-gray-200 dark:border-gray-700 pb-2">Identity Proofs</h3>
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-5 mb-5">
-                        <FormInput name="aadhaarNumber" label="Aadhaar Number"  value={formData.aadhaarNumber} onChange={handleChange} placeholder="XXXX-XXXX-XXXX" textTransform="none" type="number" error={errors.aadhaarNumber} required/>
+                        <FormInput name="aadhaarNumber" label="Aadhaar Number" value={formData.aadhaarNumber} onChange={handleChange} placeholder="XXXX-XXXX-XXXX" textTransform="none" type="number" error={errors.aadhaarNumber} required />
                         <FileInputField label="Aadhaar Scan" onChange={(e) => handleFileChange(e, 'aadhaarFile')} />
-                        <FormInput name="panNumber" label="PAN Number" value={formData.panNumber} onChange={handleChange} textTransform="uppercase" placeholder="ABCDE1234G" error={errors.panNumber} required/>
+                        <FormInput name="panNumber" label="PAN Number" value={formData.panNumber} onChange={handleChange} textTransform="uppercase" placeholder="ABCDE1234G" error={errors.panNumber} required />
                         <FileInputField label="PAN Scan" onChange={(e) => handleFileChange(e, 'panFile')} />
                     </div>
                 </section>
@@ -202,7 +211,7 @@ export default function AddEmployeePage() {
                     <h3 className="text-lg font-bold text-gray-800 dark:text-gray-200 mb-4 border-b border-gray-200 dark:border-gray-700 pb-2">Bank Details</h3>
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
                         <FormInput name="accountHolderName" label="Account Holder Name" value={formData.accountHolderName} onChange={handleChange} placeholder="John Doe" error={errors.accountHolderName} required />
-                        <FormInput name="bankName" label="Bank Name" value={formData.bankName} onChange={handleChange} placeholder="HDFC Bank" error={errors.bankName} required/>
+                        <FormInput name="bankName" label="Bank Name" value={formData.bankName} onChange={handleChange} placeholder="HDFC Bank" error={errors.bankName} required />
                         <FormInput name="accountNumber" label="Account Number*" type="number" value={formData.accountNumber} onChange={handleChange} textTransform="none" placeholder="123456789012" error={errors.accountNumber} required />
                         <FormInput name="ifsc" label="IFSC Code*" value={formData.ifsc} onChange={handleChange} textTransform="uppercase" placeholder="HDFC0001234" error={errors.ifsc} required />
                         <FormInput name="branch" label="Branch Name*" value={formData.branch} onChange={handleChange} placeholder="Branch Name" error={errors.branch} required />

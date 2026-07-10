@@ -25,7 +25,7 @@ export default function HistoryTab() {
                         placeholder="Search by name, code, or department..."
                         value={searchQuery}
                         onChange={(e) => setSearchQuery(e.target.value)}
-                        className="w-full pl-10 pr-4 py-2.5 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-primary/50 transition-shadow dark:text-white"
+                        className="w-full pl-10 pr-4 py-2.5 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-brand-green transition-shadow dark:text-white"
                     />
                     {/* Search Icon */}
                     <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">

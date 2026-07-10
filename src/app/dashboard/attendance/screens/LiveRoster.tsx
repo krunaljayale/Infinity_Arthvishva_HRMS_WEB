@@ -15,14 +15,14 @@ export default function LiveRoster() {
           placeholder="Search employee..."
           value={filters.searchQuery}
           onChange={(e) => filters.setSearchQuery(e.target.value)}
-          className="w-full sm:w-72 px-4 py-2 border border-gray-200 dark:border-gray-700 rounded-lg bg-gray-50 dark:bg-gray-800 text-sm focus:outline-none focus:ring-2 focus:ring-primary/50"
+          className="w-full sm:w-72 px-4 py-2 border border-gray-200 dark:border-gray-700 rounded-lg bg-white dark:bg-gray-800 text-sm focus:outline-none focus:ring-2 focus:ring-brand-green"
         />
 
         <div className="flex gap-3 w-full sm:w-auto">
           <select
             value={filters.selectedWorkMode}
             onChange={(e) => filters.setSelectedWorkMode(e.target.value)}
-            className="px-4 py-2 border border-gray-200 dark:border-gray-700 rounded-lg bg-gray-50 dark:bg-gray-800 text-sm focus:outline-none"
+            className="px-4 py-2 border border-gray-200 dark:border-gray-700 rounded-lg bg-gray-50 dark:bg-gray-800 text-sm focus:outline-none focus:ring-2 focus:ring-brand-green"
           >
             <option value="">All Modes</option>
             <option value="Office">Office</option>

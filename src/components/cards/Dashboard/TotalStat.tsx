@@ -1,17 +1,13 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { BarChart3 } from "lucide-react"; // Imported for the empty state
+import { BarChart3 } from "lucide-react"; 
 import { useTotalStat } from "@/hooks/dashboard-hooks/useTotalStat";
 
 export default function TotalStat() {
-  // 1. Consume business logic from the hook
   const { chartData, loading, viewMode, setViewMode } = useTotalStat();
-
-  // 2. Keep purely visual state inside the component
   const [activeLabel, setActiveLabel] = useState<string>("");
 
-  // Auto-select the last item in the array whenever the data changes
   useEffect(() => {
     if (chartData.length > 0) {
       setActiveLabel(chartData[chartData.length - 1].label);
@@ -60,13 +56,13 @@ export default function TotalStat() {
       {loading ? (
         // STATE 1: LOADING
         <div className="w-full h-72 flex flex-col items-center justify-center gap-2 text-secondary dark:text-gray-500 animate-pulse">
-          <div className="w-8 h-8 border-2 border-primary border-t-transparent rounded-full animate-spin"></div>
+          <div className="w-8 h-8 border-2 border-brand-green border-t-transparent rounded-full animate-spin"></div>
           <span className="text-xs">Loading stats...</span>
         </div>
       ) : chartData.length === 0 ? (
         // STATE 2: EMPTY (No Data)
         <div className="w-full h-72 flex flex-col items-center justify-center text-center opacity-70">
-          <div className="bg-fuchsia-50 dark:bg-fuchsia-500/10 p-4 rounded-full mb-3 text-fuchsia-500">
+          <div className="bg-brand-green/10 dark:bg-brand-green/20 p-4 rounded-full mb-3 text-brand-green">
             <BarChart3 className="w-6 h-6" />
           </div>
           <p className="text-sm font-semibold text-primary dark:text-white">
@@ -109,9 +105,9 @@ export default function TotalStat() {
                         : "opacity-0 translate-y-2 scale-90 pointer-events-none"
                         }`}
                     >
-                      <div className="bg-primary dark:bg-white text-white dark:text-primary text-[10px] font-bold py-1.5 px-3 rounded-full shadow-xl whitespace-nowrap relative">
+                      <div className="bg-brand-green dark:bg-white text-white dark:text-brand-green text-[10px] font-bold py-1.5 px-3 rounded-full shadow-xl whitespace-nowrap relative">
                         {percentage}%
-                        <div className="absolute -bottom-1 left-1/2 -translate-x-1/2 w-2 h-2 bg-primary dark:bg-white rotate-45"></div>
+                        <div className="absolute -bottom-1 left-1/2 -translate-x-1/2 w-2 h-2 bg-brand-green dark:bg-white rotate-45"></div>
                       </div>
                     </div>
 
@@ -119,8 +115,9 @@ export default function TotalStat() {
                     <div className="relative w-full max-w-[2.5rem] h-48 flex items-end rounded-t-xl bg-transparent">
                       <div
                         className={`w-full rounded-t-md md:rounded-t-xl transition-all duration-300 ease-out ${isActive
-                          ? "bg-gradient-to-t from-fuchsia-500 to-purple-600 shadow-lg shadow-fuchsia-500/40 dark:shadow-fuchsia-500/60 scale-[1.05]"
-                          : "bg-purple-100 hover:bg-purple-200 dark:bg-white/5 dark:hover:bg-white/10"
+                          // Applied Brand Blue to Brand Green gradient here
+                          ? "bg-gradient-to-t from-brand-green to-brand-blue shadow-lg shadow-brand-green/40 dark:shadow-brand-green/60 scale-[1.05]"
+                          : "bg-brand-green/20 hover:bg-brand-green/30 dark:bg-white/5 dark:hover:bg-white/10"
                           }`}
                         style={{ height: `${percentage}%` }}
                       ></div>

@@ -10,7 +10,8 @@ import {
     Megaphone,
     FileArchive,
     FileTerminal,
-    PlaneTakeoff
+    PlaneTakeoff,
+    HandCoins,
 } from "lucide-react";
 
 // --- MANAGEMENT STACK (HR & DIRECTOR) ---
@@ -41,9 +42,15 @@ export const DASHBOARD_NAV = [
                 requiredRoles: ["HR", "DIRECTOR"],
             },
             {
-                title: "Payroll & Compensation",
+                title: "Payroll",
                 url: "/dashboard/payroll",
                 icon: CreditCard,
+                requiredRoles: ["HR", "DIRECTOR"],
+            },
+            {
+                title: "Reimbursement",
+                url: "/dashboard/reimbursement",
+                icon: HandCoins,
                 requiredRoles: ["HR", "DIRECTOR"],
             },
             {

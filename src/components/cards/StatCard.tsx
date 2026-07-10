@@ -8,7 +8,7 @@ export default function StatCard({ title, value, icon }: StatCardProps) {
           {value}
         </h3>
 
-        <div className="w-10 h-10 rounded-full bg-lavender/30 dark:bg-white/10 flex items-center justify-center text-magenta">
+        <div className="w-10 h-10 rounded-full dark:bg-white/10 flex items-center justify-center text-brand-blue">
           {icon || (
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -33,11 +33,11 @@ export default function StatCard({ title, value, icon }: StatCardProps) {
         </p>
 
         <div className="flex items-end gap-1.5 h-8">
-          <div className="w-2.5 rounded-t-sm bg-linear-to-t from-lavender/50 to-magenta/40 dark:from-lavender/30 dark:to-magenta/60 h-[40%]"></div>
-          <div className="w-2.5 rounded-t-sm bg-linear-to-t from-lavender/50 to-magenta/60 dark:from-lavender/30 dark:to-magenta/80 h-[70%]"></div>
-          <div className="w-2.5 rounded-t-sm bg-linear-to-t from-lavender/50 to-magenta dark:from-lavender/30 dark:to-magenta h-full"></div>
-          <div className="w-2.5 rounded-t-sm bg-linear-to-t from-lavender/50 to-magenta/50 dark:from-lavender/30 dark:to-magenta/70 h-[50%]"></div>
-          <div className="w-2.5 rounded-t-sm bg-linear-to-t from-lavender/50 to-magenta/30 dark:from-lavender/30 dark:to-magenta/50 h-[60%]"></div>
+          <div className="w-2.5 rounded-t-sm bg-linear-to-t from-brand-green/50 to-brand-blue/40 dark:from-brand-green/30 dark:to-brand-blue/60 h-[40%]"></div>
+          <div className="w-2.5 rounded-t-sm bg-linear-to-t from-brand-green/50 to-brand-blue/60 dark:from-brand-green/30 dark:to-brand-blue/80 h-[70%]"></div>
+          <div className="w-2.5 rounded-t-sm bg-linear-to-t from-brand-green/50 to-brand-blue dark:from-brand-bgreen/30 dark:to-brand-blue h-full"></div>
+          <div className="w-2.5 rounded-t-sm bg-linear-to-t from-brand-green/50 to-brand-blue/50 dark:from-brand-green/30 dark:to-brand-blue/70 h-[50%]"></div>
+          <div className="w-2.5 rounded-t-sm bg-linear-to-t from-brand-green/50 to-brand-blue/30 dark:from-brand-green/30 dark:to-brand-blue/50 h-[60%]"></div>
         </div>
       </div>
     </div>

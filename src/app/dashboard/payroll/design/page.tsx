@@ -164,7 +164,7 @@ export default function PayrollDashboard() {
             Manage accurate salary processing for active employees.
           </p>
         </div>
-        <button className="flex items-center gap-2 bg-[#573CFF] hover:bg-purple-700 text-white px-6 py-3 rounded-lg font-semibold shadow-md transition-all">
+        <button className="flex items-center gap-2 bg-brand-blue hover:bg-purple-700 text-white px-6 py-3 rounded-lg font-semibold shadow-md transition-all">
           <FilePlay size={18} />
           Process All Active
         </button>
@@ -175,7 +175,7 @@ export default function PayrollDashboard() {
         <input
           type="text"
           placeholder="Search by name or code..."
-          className="px-4 py-2 w-64 border rounded-md focus:outline-none focus:ring-2 focus:ring-[#573CFF] text-sm"
+          className="px-4 py-2 w-64 border rounded-md focus:outline-none focus:ring-2 focus:ring-brand-blue text-sm"
         />
         <select className="px-4 py-2 border rounded-md bg-white text-sm">
           <option value="5">May 2026</option>
@@ -266,7 +266,7 @@ export default function PayrollDashboard() {
                   <span
                     className={`px-3 py-1 rounded-full text-xs font-bold
                     ${slip.status === "Paid" ? "bg-emerald-100 text-emerald-700" : ""}
-                    ${slip.status === "Processed" ? "bg-[#573CFF]/10 text-[#573CFF]" : ""}
+                    ${slip.status === "Processed" ? "bg-brand-blue/10 text-brand-blue" : ""}
                     ${slip.status === "Draft" ? "bg-gray-100 text-gray-600" : ""}
                   `}
                   >
@@ -277,13 +277,13 @@ export default function PayrollDashboard() {
                 <td className="p-4 flex justify-center gap-3 text-gray-400">
                   <button
                     onClick={() => openDrawer(slip)}
-                    className="hover:text-[#573CFF] p-2 hover:bg-[#573CFF]/10 rounded transition-colors"
+                    className="hover:text-brand-blue p-2 hover:bg-brand-blue/10 rounded transition-colors"
                     title="View Breakdown"
                   >
                     <Eye size={18} />
                   </button>
                   <button
-                    className="hover:text-[#573CFF] p-2 hover:bg-[#573CFF]/10 rounded transition-colors"
+                    className="hover:text-brand-blue p-2 hover:bg-brand-blue/10 rounded transition-colors"
                     title="Download Slip"
                   >
                     <Download size={18} />
