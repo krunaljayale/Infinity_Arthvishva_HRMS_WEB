@@ -30,8 +30,10 @@ export const attendanceService = {
         await apiClient.patch(HR_API.APPROVE_CORRECTION(attendanceId));
     },
 
-    async rejectCorrection(attendanceId: string): Promise<void> {
-        await apiClient.patch(HR_API.REJECT_CORRECTION(attendanceId));
+    async rejectCorrection(attendanceId: string, remark: string): Promise<void> {
+        await apiClient.patch(HR_API.REJECT_CORRECTION(attendanceId), {
+            remark: remark
+        });
     },
 
     async getHistoricalLedger(filters: HistoricalLedgerFilters): Promise<PaginatedResponse<LedgerItem>> {

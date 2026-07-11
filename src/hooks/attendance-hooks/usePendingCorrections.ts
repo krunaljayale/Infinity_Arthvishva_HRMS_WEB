@@ -55,17 +55,22 @@ export function usePendingCorrections() {
         }
     };
 
-    const handleReject = async (attendanceId: string) => {
+    // Inside usePendingCorrections hook...
+
+    // Add remark as the second parameter
+    const handleReject = async (attendanceId: string, remark: string) => {
         const previousRequests = [...requests];
+        // Optimistic UI update
         setRequests((prev) => prev.filter((req) => req.attendanceId !== attendanceId));
 
         try {
-            await attendanceService.rejectCorrection(attendanceId);
-
+            // Pass the remark to the service
+            await attendanceService.rejectCorrection(attendanceId, remark);
             window.dispatchEvent(new Event('correctionProcessed'));
 
         } catch (error) {
             console.error("Failed to reject correction:", error);
+            // Revert state if backend fails
             setRequests(previousRequests);
         }
     };
