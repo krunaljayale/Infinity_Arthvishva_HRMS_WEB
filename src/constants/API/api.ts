@@ -60,4 +60,9 @@ export const HR_API = {
   CREATE_EMPLOYEE: `${SERVER_URL}/api/web/hr/employees/create`,
   GET_PAYROLL_LIST: `${SERVER_URL}/api/web/hr/payroll/payrollList`,
   PROCESS_ALL_ACTIVE_PAYROLL: `${SERVER_URL}/api/web/hr/payroll/process-all-active`,
+
+  GET_PENDING_REIMBURSEMENTS: `${SERVER_URL}/api/web/hr/reimbursement/pending`,
+  APPROVE_REIMBURSEMENT: (id: string) => `${SERVER_URL}/api/web/hr/reimbursement/${id}/approve`,
+  REJECT_REIMBURSEMENT: (id: string) => `${SERVER_URL}/api/web/hr/reimbursement/${id}/reject`,
+  GET_HISTORICAL_REIMBURSEMENTS: `${SERVER_URL}/api/web/hr/reimbursement/historical`,
 }
