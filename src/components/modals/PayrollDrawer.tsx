@@ -1,7 +1,16 @@
 "use client";
 
 import React, { useState, useEffect, useMemo } from "react";
-import { X, Calendar, Filter } from "lucide-react";
+import {
+    X,
+    Calendar,
+    Filter,
+    Bed,
+    Circle,
+    CheckCircle2,
+    CloudSun,
+    Plane
+} from "lucide-react";
 
 interface AttendanceDrawerProps {
     isOpen: boolean;
@@ -10,7 +19,6 @@ interface AttendanceDrawerProps {
 }
 
 export default function PayrollDrawer({ isOpen, onClose, slip }: AttendanceDrawerProps) {
-
     const [activeFilter, setActiveFilter] = useState<string>("All");
 
     useEffect(() => {
@@ -30,7 +38,7 @@ export default function PayrollDrawer({ isOpen, onClose, slip }: AttendanceDrawe
             case "A":
             case "ABSENT":
             case "SANDWICHED":
-                return "bg-red-100 dark:bg-red-900/30 text-red-700 dark:text-red-400 border-red-200 dark:border-red-800/50";
+                return "bg-gray-100 dark:bg-gray-800 text-gray-500 dark:text-gray-400 border-gray-200 dark:border-gray-700"; // Matched to screenshot (grey for absent)
             case "WO":
             case "WEEKOFF":
                 return "bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-400 border-gray-200 dark:border-gray-700";
@@ -42,14 +50,42 @@ export default function PayrollDrawer({ isOpen, onClose, slip }: AttendanceDrawe
             case "HALFCOMPOFF":
                 return "bg-teal-100 dark:bg-teal-900/30 text-teal-700 dark:text-teal-400 border-teal-200 dark:border-teal-800/50";
             case "H":
-            case "HALFDAY":
+            case "HalfDay":
             case "HALF":
-                return "bg-orange-100 dark:bg-orange-900/30 text-orange-700 dark:text-orange-400 border-orange-200 dark:border-orange-800/50";
+                return "bg-amber-100 dark:bg-amber-900/30 text-amber-700 dark:text-amber-400 border-amber-200 dark:border-amber-800/50";
             case "AUTO":
             case "HOLIDAY":
                 return "bg-purple-100 dark:bg-purple-900/30 text-purple-700 dark:text-purple-400 border-purple-200 dark:border-purple-800/50";
             default:
                 return "bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-400 border-gray-200 dark:border-gray-700";
+        }
+    };
+
+    // Mapping enum values to icons like the screenshot
+    const getTypeIcon = (type: string) => {
+        const normalizedType = String(type || "").trim().toUpperCase();
+
+        switch (normalizedType) {
+            case "P":
+            case "PRESENT":
+                return <CheckCircle2 size={16} className="text-green-500 fill-green-100" />;
+            case "A":
+            case "ABSENT":
+            case "SANDWICHED":
+                return <Circle size={16} className="text-slate-600 fill-slate-500" />;
+            case "WO":
+            case "WEEKOFF":
+                return <Bed size={16} className="text-slate-500" />;
+            case "L":
+            case "PAIDLEAVE":
+            case "LEAVE":
+                return <Plane size={16} className="text-blue-500 fill-blue-100" />;
+            case "H":
+            case "HALFDAY":
+            case "HALF":
+                return <CloudSun size={16} className="text-amber-600 fill-amber-100" />;
+            default:
+                return <Circle size={16} className="text-gray-400" />;
         }
     };
 
@@ -65,16 +101,21 @@ export default function PayrollDrawer({ isOpen, onClose, slip }: AttendanceDrawe
     ];
 
     // ─── FRONTEND INJECTION LOGIC ───
-    // This reconstructs the full timeline. If a date is missing from the backend array,
-    // it automatically generates an "Absent" record for the UI.
     const completeBreakdown = useMemo(() => {
         if (!slip?.fromDate || !slip?.toDate) {
             return slip?.paidDaysBreakdown || [];
         }
 
         const backendDays = slip.paidDaysBreakdown || [];
-        // Map existing days by date string for O(1) lookup
-        const backendMap = new Map(backendDays.map((day: any) => [day.date, day]));
+
+        // Group entries by date to handle multiple records for a single day (e.g. HalfDay + PaidLeave)
+        const backendMap = new Map();
+        backendDays.forEach((day: any) => {
+            if (!backendMap.has(day.date)) {
+                backendMap.set(day.date, []);
+            }
+            backendMap.get(day.date).push(day);
+        });
 
         const start = new Date(slip.fromDate);
         const end = new Date(slip.toDate);
@@ -83,31 +124,28 @@ export default function PayrollDrawer({ isOpen, onClose, slip }: AttendanceDrawe
         let current = new Date(start);
 
         while (current <= end) {
-            // Safely format date to YYYY-MM-DD strictly matching the backend format
             const year = current.getFullYear();
             const month = String(current.getMonth() + 1).padStart(2, '0');
             const day = String(current.getDate()).padStart(2, '0');
             const dStr = `${year}-${month}-${day}`;
 
             if (backendMap.has(dStr)) {
-                // If backend provided this day (Present, WeekOff, etc), use it
-                fullTimeline.push(backendMap.get(dStr));
+                // Spread ALL events for this day into the timeline
+                fullTimeline.push(...backendMap.get(dStr));
             } else {
-                // If it's completely missing, inject it as Absent
+                // If completely missing, inject as Absent
                 fullTimeline.push({
                     date: dStr,
                     type: "Absent",
                     value: 0
                 });
             }
-            // Increment by 1 day
             current.setDate(current.getDate() + 1);
         }
 
         return fullTimeline;
     }, [slip]);
 
-    // Apply filtering against the newly completed timeline
     const filteredDays = completeBreakdown.filter((day: any) => {
         if (activeFilter === "All") return true;
 
@@ -118,20 +156,20 @@ export default function PayrollDrawer({ isOpen, onClose, slip }: AttendanceDrawe
         if (activeFilter === "WO") return type === "WO" || type === "WEEKOFF";
         if (activeFilter === "L") return type === "L" || type === "PAIDLEAVE" || type === "LEAVE";
         if (activeFilter === "CompOff") return type === "COMPOFF" || type === "HALFCOMPOFF";
-        if (activeFilter === "Half") return type === "HALF" || type === "H";
+
+        // Updated: Added "HALFDAY" to match the string in your data
+        if (activeFilter === "Half") return type === "HALF" || type === "H" || type === "HALFDAY";
 
         return type === activeFilter.toUpperCase();
     });
 
     return (
         <>
-            {/* ─── SLIDE-OUT OVERLAY ─── */}
             <div
                 className={`fixed inset-0 bg-black/40 backdrop-blur-sm z-40 transition-opacity duration-300 ${isOpen ? "opacity-100 visible pointer-events-auto" : "opacity-0 invisible pointer-events-none"}`}
                 onClick={onClose}
             />
 
-            {/* ─── SLIDE-OUT PANEL ─── */}
             <div className={`fixed right-0 top-0 h-full w-full max-w-md bg-white dark:bg-primary shadow-2xl z-50 transform transition-transform duration-300 ease-in-out flex flex-col border-l border-transparent dark:border-gray-800 ${isOpen ? "translate-x-0" : "translate-x-full"}`}>
                 <div className="p-6 border-b border-gray-100 dark:border-gray-800 flex justify-between items-center bg-gray-50 dark:bg-secondary transition-colors duration-300">
                     <div>
@@ -147,7 +185,7 @@ export default function PayrollDrawer({ isOpen, onClose, slip }: AttendanceDrawe
 
                 <div className="p-6 overflow-y-auto flex-1 bg-white dark:bg-primary transition-colors duration-300">
 
-                    {/* ─── FILTER CONTROLS ─── */}
+                    {/* FILTER CONTROLS */}
                     <div className="mb-6">
                         <div className="flex items-center gap-2 mb-3">
                             <Filter size={16} className="text-gray-400" />
@@ -176,17 +214,35 @@ export default function PayrollDrawer({ isOpen, onClose, slip }: AttendanceDrawe
                         </h3>
                     </div>
 
-                    {/* ─── FILTERED LIST ─── */}
-                    <div className="flex flex-col gap-2">
+                    {/* FILTERED LIST */}
+                    <div className="flex flex-col gap-3">
                         {filteredDays.length > 0 ? (
                             filteredDays.map((day: any, idx: number) => (
-                                <div key={idx} className="flex justify-between items-center p-3 rounded-lg border border-gray-100 dark:border-gray-800 bg-gray-50/50 dark:bg-secondary/30 hover:bg-white dark:hover:bg-white/5 transition-colors">
-                                    <span className="text-sm font-medium text-gray-600 dark:text-gray-400">
-                                        {new Date(day.date).toDateString()}
-                                    </span>
-                                    <span className={`px-3 py-1 rounded text-xs font-bold shadow-sm border ${getTypeStyles(day.type)}`}>
-                                        {day.type} {day.value === 0.5 ? '(Half)' : ''}
-                                    </span>
+                                <div key={idx} className="flex justify-between items-center py-2 border-b border-gray-50 dark:border-gray-800/50 last:border-0 hover:bg-gray-50/50 dark:hover:bg-white/5 transition-colors px-2 -mx-2 rounded-lg">
+                                    <div className="flex items-center gap-4">
+                                        {/* Icon Wrapper */}
+                                        <div className="w-8 h-8 rounded-full bg-gray-50 dark:bg-gray-800 flex items-center justify-center border border-gray-100 dark:border-gray-700">
+                                            {getTypeIcon(day.type)}
+                                        </div>
+
+                                        {/* Date Text Formatting (e.g. "26 Jun 2026") */}
+                                        <span className="text-sm font-medium text-gray-700 dark:text-gray-300">
+                                            {new Date(day.date).toLocaleDateString('en-GB', {
+                                                day: '2-digit',
+                                                month: 'short',
+                                                year: 'numeric'
+                                            })}
+                                        </span>
+                                    </div>
+
+                                    <div className="flex items-center gap-3">
+                                        <span className={`px-2.5 py-0.5 rounded-full text-[11px] font-bold border ${getTypeStyles(day.type)}`}>
+                                            {day.type}
+                                        </span>
+                                        <span className="text-sm font-bold w-8 text-right text-gray-900 dark:text-white">
+                                            +{day.value}
+                                        </span>
+                                    </div>
                                 </div>
                             ))
                         ) : (

@@ -19,21 +19,18 @@ export const MONTH_CYCLES = [
     { value: 12, label: "Nov 21 - Dec 20 (Dec Cycle)" }
 ];
 
-// Generate last 5 years + next 1 year
 export const getYearOptions = () => {
     const currentYear = new Date().getFullYear();
     return Array.from({ length: 7 }, (_, i) => currentYear - 5 + i);
 };
 
 export function usePayrollDashboard(initialUserId: string) {
-    // ─── INITIALIZE DEFAULT CYCLE TO "CURRENT ACTIVE" ───
     const initialCycle = useMemo(() => {
         const now = new Date();
         const d = now.getDate();
-        const m = now.getMonth(); // 0-11
+        const m = now.getMonth();
         let y = now.getFullYear();
 
-        // If past the 20th, we are officially building next month's cycle
         let targetMonth = d > 20 ? m + 2 : m + 1;
 
         if (targetMonth > 12) {
@@ -43,38 +40,36 @@ export function usePayrollDashboard(initialUserId: string) {
         return { targetMonth, targetYear: y };
     }, []);
 
-    // ─── FILTER & PAGINATION STATES ───
     const [search, setSearch] = useState("");
     const [debouncedSearch, setDebouncedSearch] = useState("");
 
     const [selectedYear, setSelectedYear] = useState<number>(initialCycle.targetYear);
-    const [selectedMonth, setSelectedMonth] = useState<number>(initialCycle.targetMonth); // 1-12
+    const [selectedMonth, setSelectedMonth] = useState<number>(initialCycle.targetMonth);
     const [status, setStatus] = useState("");
     const [page, setPage] = useState(1);
     const [limit, setLimit] = useState(10);
 
-    // ─── DATA ENGINE STATES ───
     const [payrolls, setPayrolls] = useState<any[]>([]);
     const [pagination, setPagination] = useState({ total: 0, totalPages: 1 });
     const [isLoading, setIsLoading] = useState(false);
     const [isProcessing, setIsProcessing] = useState(false);
 
-    // ─── INTERACTION STATES ───
+    // ─── PAYROLL SLIP DRAWER STATE ───
     const [selectedSlip, setSelectedSlip] = useState<any | null>(null);
     const [isDrawerOpen, setIsDrawerOpen] = useState(false);
 
-    // ─── DEBOUNCE EFFECT ───
+    // ─── REIMBURSEMENT DRAWER STATE ───
+    const [selectedReimbursements, setSelectedReimbursements] = useState<any[]>([]);
+    const [isReimbursementDrawerOpen, setIsReimbursementDrawerOpen] = useState(false);
+
     useEffect(() => {
         const handler = setTimeout(() => {
             setDebouncedSearch(search);
         }, 500);
-
         return () => clearTimeout(handler);
     }, [search]);
 
-    // ─── DYNAMIC DATE CALCULATION ───
     const cycleData = useMemo(() => {
-        // JS Date trick: Month - 2 automatically wraps to Nov/Dec of previous year if needed!
         const fromD = new Date(selectedYear, selectedMonth - 2, 21, 0, 0, 0);
         const toD = new Date(selectedYear, selectedMonth - 1, 20, 23, 59, 59);
 
@@ -93,11 +88,8 @@ export function usePayrollDashboard(initialUserId: string) {
         };
     }, [selectedYear, selectedMonth]);
 
-    // ─── CORE FETCHING LOGIC ───
     const fetchPayrolls = useCallback(async () => {
-        // .trim() safely converts "   " into ""
         const trimmedSearch = debouncedSearch.trim();
-
         setIsLoading(true);
         try {
             const params: GetPayrollParams = {
@@ -106,14 +98,12 @@ export function usePayrollDashboard(initialUserId: string) {
                 status: status || undefined,
                 startDate: cycleData.startDate,
                 endDate: cycleData.endDate,
-                // If trimmedSearch is "", it falls back to undefined and resets the list
                 search: trimmedSearch || undefined,
             };
 
             const response = await payrollService.getPayrollList(params);
             setPayrolls(response.payrolls || []);
             setPagination(response.pagination || { total: 0, totalPages: 1 });
-
         } catch (error) {
             console.error("Failed to load payroll table records:", error);
         } finally {
@@ -121,7 +111,6 @@ export function usePayrollDashboard(initialUserId: string) {
         }
     }, [page, limit, status, cycleData.startDate, cycleData.endDate, debouncedSearch]);
 
-    // Reset to page 1 only when filters (or the debounced search) actually change
     useEffect(() => {
         setPage(1);
     }, [status, selectedYear, selectedMonth, debouncedSearch]);
@@ -130,7 +119,6 @@ export function usePayrollDashboard(initialUserId: string) {
         fetchPayrolls();
     }, [fetchPayrolls]);
 
-    // ─── BATCH ENGINE CALLS ───
     const handleProcessAll = async () => {
         const confirmRun = window.confirm(
             `Are you sure you want to run batch payroll for the ${cycleData.startDate} to ${cycleData.endDate} cycle?`
@@ -146,7 +134,6 @@ export function usePayrollDashboard(initialUserId: string) {
                 cycleData.targetYear,
                 initialUserId
             );
-
             alert(`Batch completed! Successful: ${summary.successful}, Failed: ${summary.failed}`);
             fetchPayrolls();
         } catch (error: any) {
@@ -156,7 +143,7 @@ export function usePayrollDashboard(initialUserId: string) {
         }
     };
 
-    // ─── INTERACTION ACTIONS ───
+    // ─── DRAWER ACTIONS ───
     const openDrawer = (slip: any) => {
         setSelectedSlip(slip);
         setIsDrawerOpen(true);
@@ -167,16 +154,23 @@ export function usePayrollDashboard(initialUserId: string) {
         setTimeout(() => setSelectedSlip(null), 300);
     };
 
+    const openReimbursementDrawer = (reimbursements: any[]) => {
+        setSelectedReimbursements(reimbursements || []);
+        setIsReimbursementDrawerOpen(true);
+    };
+
+    const closeReimbursementDrawer = () => {
+        setIsReimbursementDrawerOpen(false);
+        setTimeout(() => setSelectedReimbursements([]), 300);
+    };
+
     return {
         payrolls,
         pagination,
         isLoading,
         isProcessing,
-
-        // Expose raw search string so the UI input updates instantly without lag
         search,
         setSearch,
-
         status,
         setStatus,
         page,
@@ -184,12 +178,17 @@ export function usePayrollDashboard(initialUserId: string) {
         limit,
         setLimit,
         handleProcessAll,
+
         selectedSlip,
         isDrawerOpen,
         openDrawer,
         closeDrawer,
 
-        // Exported state for the Split UI
+        selectedReimbursements,
+        isReimbursementDrawerOpen,
+        openReimbursementDrawer,
+        closeReimbursementDrawer,
+
         selectedYear,
         setSelectedYear,
         selectedMonth,

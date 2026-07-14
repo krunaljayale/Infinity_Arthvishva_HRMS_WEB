@@ -5,27 +5,31 @@ import GradientButton from "@/components/buttons/GradientButton";
 import PageTitleHeader from "@/components/elements/PageTitleHeader";
 import { usePayrollDashboard } from "@/hooks/payroll-hooks/usePayrollDashboard";
 import PayrollDrawer from "@/components/modals/PayrollDrawer";
+import ReimbursementDrawer from "@/components/modals/ReimbursementDrawer";
 
 interface PayrollDashboardProps {
     currentUserId: string;
 }
 
 export default function PayrollDashboard({ currentUserId }: PayrollDashboardProps) {
-    // ─── CONSUME CUSTOM CORE HOOK ───
     const {
         payrolls,
         isLoading,
         isProcessing,
         search,
         setSearch,
-        status,
-        setStatus,
         handleProcessAll,
+
         selectedSlip,
         isDrawerOpen,
         openDrawer,
         closeDrawer,
-        // Destructure pagination dependencies out of your hook engine matrix
+
+        selectedReimbursements,
+        isReimbursementDrawerOpen,
+        openReimbursementDrawer,
+        closeReimbursementDrawer,
+
         page,
         setPage,
         limit,
@@ -39,7 +43,6 @@ export default function PayrollDashboard({ currentUserId }: PayrollDashboardProp
         monthOptions
     } = usePayrollDashboard(currentUserId);
 
-    // ─── HELPER: Render dynamic, zero-filtered attendance pills ───
     const renderAttendancePills = (slip: any) => {
         const pills = [];
 
@@ -69,8 +72,6 @@ export default function PayrollDashboard({ currentUserId }: PayrollDashboardProp
 
                 {/* ─── FILTERS CONTAINER ─── */}
                 <div className="bg-white dark:bg-primary p-4 rounded-xl mb-6 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-6 gap-4 items-center border border-gray-100 dark:border-gray-800 shadow-sm transition-colors duration-300">
-
-                    {/* Search Input */}
                     <div className="lg:col-span-2 relative flex items-center h-full">
                         <div className="absolute left-3 flex items-center pointer-events-none text-gray-400 dark:text-gray-500">
                             <Search size={16} />
@@ -84,7 +85,6 @@ export default function PayrollDashboard({ currentUserId }: PayrollDashboardProp
                         />
                     </div>
 
-                    {/* The Year Selector */}
                     <div className="lg:col-span-1 h-full flex items-center">
                         <select
                             value={selectedYear}
@@ -97,7 +97,6 @@ export default function PayrollDashboard({ currentUserId }: PayrollDashboardProp
                         </select>
                     </div>
 
-                    {/* The Month Cycle Selector */}
                     <div className="lg:col-span-2 h-full flex items-center">
                         <select
                             value={selectedMonth}
@@ -112,7 +111,6 @@ export default function PayrollDashboard({ currentUserId }: PayrollDashboardProp
                         </select>
                     </div>
 
-                    {/* Batch Action Button */}
                     <div className="lg:col-span-1 flex lg:justify-end items-center h-full">
                         <GradientButton onClick={handleProcessAll} className="w-full lg:w-auto py-2 text-sm" disabled={isProcessing}>
                             {isProcessing ? "Processing..." : "Process all"}
@@ -128,14 +126,13 @@ export default function PayrollDashboard({ currentUserId }: PayrollDashboardProp
                                 <th className="p-4">Employee</th>
                                 <th className="p-4">Payable Days</th>
                                 <th className="p-4">Attendance Breakdown</th>
-                                <th className="p-4">Leaves Taken</th>
+                                <th className="p-4">Unpaid Days</th>
                                 <th className="p-4">Basic Salary</th>
                                 <th className="p-4">Gross Salary</th>
                                 <th className="p-4">Allowances</th>
+                                <th className="p-4">Reimbursements</th>
                                 <th className="p-4">Deductions</th>
                                 <th className="p-4">Net Salary</th>
-                                {/* <th className="p-4">Status</th> */}
-                                {/* <th className="p-4 text-center">Actions</th> */}
                             </tr>
                         </thead>
                         <tbody className="divide-y divide-gray-100 dark:divide-gray-800 text-primary dark:text-white transition-colors duration-300">
@@ -167,7 +164,7 @@ export default function PayrollDashboard({ currentUserId }: PayrollDashboardProp
                                             </div>
                                         </td>
                                         <td className="p-4 text-sm font-bold text-gray-700 dark:text-gray-300">
-                                            {slip.leavesTaken}
+                                            {slip.unpaidLeaves}
                                         </td>
                                         <td className="p-4 text-sm">
                                             ₹{slip.earnings?.basic?.toLocaleString() || 0}
@@ -178,26 +175,32 @@ export default function PayrollDashboard({ currentUserId }: PayrollDashboardProp
                                         <td className="p-4 text-sm">
                                             ₹{slip.earnings?.allowances?.toLocaleString() || 0}
                                         </td>
+                                        <td className="p-4 text-sm">
+                                            {slip.reimbursementsList?.length > 0 ? (
+                                                <div
+                                                    onClick={() => openReimbursementDrawer(slip.reimbursementsList)}
+                                                    className="flex items-center gap-2 cursor-pointer group/reimb w-fit"
+                                                >
+                                                    {/* Value with subtle interactive border text */}
+                                                    <span className="font-semibold text-gray-900 dark:text-white border-b border-dashed border-gray-300 dark:border-gray-600 group-hover/reimb:border-blue-500 group-hover/reimb:text-blue-600 dark:group-hover/reimb:text-blue-400 transition-colors">
+                                                        ₹{slip.earnings?.reimbursements?.toLocaleString() || 0}
+                                                    </span>
+
+                                                    {/* Minimalistic receipt item count badge */}
+                                                    <span className="text-[10px] font-bold px-1.5 py-0.5 rounded bg-gray-50 dark:bg-white/5 text-gray-500 dark:text-gray-400 border border-gray-200 dark:border-gray-800 group-hover/reimb:bg-blue-50 dark:group-hover/reimb:bg-blue-900/20 group-hover/reimb:text-blue-600 dark:group-hover/reimb:text-blue-400 group-hover/reimb:border-blue-100 dark:group-hover/reimb:border-blue-900/30 transition-all">
+                                                        {slip.reimbursementsList.length}
+                                                    </span>
+                                                </div>
+                                            ) : (
+                                                <span className="text-gray-400 dark:text-gray-500">₹0</span>
+                                            )}
+                                        </td>
                                         <td className="p-4 text-sm text-[#FF0069] font-medium">
                                             -₹{slip.deductions?.totalDeductions?.toLocaleString() || 0}
                                         </td>
                                         <td className="p-4 font-bold text-emerald-600 dark:text-emerald-400 text-base">
                                             ₹{slip.netSalary?.toLocaleString() || 0}
                                         </td>
-                                        {/* <td className="p-4">
-                                            <span className={`px-3 py-1 rounded-full text-xs font-bold
-                                                ${slip.status === "Paid" ? "bg-emerald-100 dark:bg-emerald-900/30 text-emerald-700 dark:text-emerald-400" : ""}
-                                                ${slip.status === "Processed" ? "bg-brand-blue/10 text-brand-blue" : ""}
-                                                ${slip.status === "Draft" ? "bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-400" : ""}
-                                            `}>
-                                                {slip.status}
-                                            </span>
-                                        </td> */}
-                                        {/* <td className="p-4 flex justify-center gap-3 text-gray-400 dark:text-gray-500">
-                                            <button className="hover:text-brand-blue p-2 hover:bg-brand-blue/10 rounded transition-colors">
-                                                <Download size={18} />
-                                            </button>
-                                        </td> */}
                                     </tr>
                                 ))
                             )}
@@ -205,7 +208,7 @@ export default function PayrollDashboard({ currentUserId }: PayrollDashboardProp
                     </table>
                 </div>
 
-                {/* ─── INTEGRATED PAGINATION MODULE ─── */}
+                {/* ─── PAGINATION ─── */}
                 <div className="flex flex-col sm:flex-row items-center justify-between text-sm text-gray-500 dark:text-gray-400 gap-4 mt-4 border-t border-gray-100 dark:border-gray-800 pt-4">
                     <div>Showing {payrolls.length} of {pagination.total || 0} records</div>
                     <div className="flex items-center gap-4">
@@ -218,7 +221,6 @@ export default function PayrollDashboard({ currentUserId }: PayrollDashboardProp
                             <option value={20}>20 per page</option>
                             <option value={50}>50 per page</option>
                         </select>
-
                         <div className="flex gap-2">
                             <button
                                 disabled={page === 1 || isLoading}
@@ -243,11 +245,16 @@ export default function PayrollDashboard({ currentUserId }: PayrollDashboardProp
 
             </div>
 
-            {/* ─── Side Drawer COMPONENT ─── */}
             <PayrollDrawer
                 isOpen={isDrawerOpen}
                 onClose={closeDrawer}
                 slip={selectedSlip}
+            />
+
+            <ReimbursementDrawer
+                isOpen={isReimbursementDrawerOpen}
+                onClose={closeReimbursementDrawer}
+                reimbursements={selectedReimbursements}
             />
 
         </div>
