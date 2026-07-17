@@ -1,109 +1,138 @@
-import Image from "next/image";
-import { AdminProfile } from "@/constants/Types";
+"use client";
+
+import {
+  ShieldCheck,
+  User,
+  Mail,
+  Building2,
+  Briefcase,
+  Fingerprint,
+  Activity
+} from "lucide-react";
 
 interface ProfileHeaderProps {
-  profile: AdminProfile;
-  isEditing: boolean;
-  onToggleEdit: () => void;
-  onSave: (e: React.FormEvent) => void;
+  idCode: string;
+  isActive: boolean;
+  employeeAccount?: {
+    _id?: string;
+    name?: string;
+    employeeCode?: string;
+    email?: string;
+    department?: string;
+    position?: string;
+    status?: string;
+  };
 }
 
-export default function ProfileHeader({
-  profile,
-  isEditing,
-  onToggleEdit,
-  onSave,
-}: ProfileHeaderProps) {
-  const avatarUrl = `https://ui-avatars.com/api/?name=${encodeURIComponent(
-    profile.name || "User",
-  )}&background=FE02C5&color=fff&size=256&bold=true`;
+export default function ProfileHeader({ idCode, isActive, employeeAccount }: ProfileHeaderProps) {
+  // Defensive destructuring with intelligent default fallbacks to satisfy the TS compiler
+  const {
+    name = "Loading Administrator...",
+    employeeCode = "N/A",
+    email = "N/A",
+    department = "N/A",
+    position = "Master HR Administrator",
+    status = "Inactive",
+    _id = "N/A"
+  } = employeeAccount || {};
+
+  // Generate initials for premium avatar fallback graphic block frame
+  const initials = name && name !== "Loading Administrator..."
+    ? name.split(" ").filter(Boolean).map((n) => n[0]).join("").toUpperCase().slice(0, 2)
+    : "HR";
 
   return (
-    <div className="relative z-10 max-w-5xl mx-auto mb-10">
-      {/* Cover Photo */}
-      <div className="h-64 w-full rounded-3xl relative overflow-hidden shadow-2xl shadow-magenta/5">
-        <div className="absolute inset-0 bg-gradient-to-r from-[#1A0F1E] to-[#4a2b57]" />
-        <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-20" />
-        <div className="absolute bottom-[-50px] left-[-50px] w-48 h-48 bg-magenta rounded-full blur-[80px] opacity-60" />
-        <div className="absolute top-[-50px] right-[-50px] w-64 h-64 bg-lavender rounded-full blur-[80px] opacity-40" />
-      </div>
+    <div className="w-full bg-white dark:bg-primary border border-gray-100 dark:border-gray-800 rounded-2xl p-6 md:p-8 shadow-[0_4px_20px_rgba(0,0,0,0.01)] dark:shadow-none transition-all duration-300 space-y-8 relative overflow-hidden">
 
-      <div className="relative -mt-20 mx-4 md:mx-8 bg-white/80 dark:bg-[#1A0F1E]/80 backdrop-blur-xl border border-white/20 dark:border-white/5 rounded-3xl p-6 md:p-8 shadow-xl flex flex-col md:flex-row items-center md:items-end gap-6 md:gap-8">
-        <div className="relative shrink-0">
-          <div className="w-32 h-32 md:w-40 md:h-40 rounded-full p-1.5 bg-gradient-to-br from-magenta to-lavender shadow-lg shadow-magenta/30">
-            <div className="w-full h-full rounded-full overflow-hidden relative bg-white dark:bg-black">
-              <Image
-                src={avatarUrl}
-                alt="Avatar"
-                fill
-                className="object-cover"
-                unoptimized
-              />
+      {/* ─── TOP BLOCK: IDENTITY SUMMARY ─── */}
+      <div className="flex flex-col md:flex-row items-center md:items-start gap-6 pb-6 border-b border-gray-100 dark:border-gray-800">
+
+        {/* Profile Avatar Frame with Active System Badge Indicator */}
+        <div className="relative flex items-center justify-center w-24 h-24 rounded-2xl bg-gradient-to-tr from-brand-blue to-brand-green text-white font-bold text-3xl shadow-lg tracking-wider shrink-0 select-none">
+          {initials}
+          {isActive && (
+            <div className="absolute -bottom-1 -right-1 bg-emerald-500 border-4 border-white dark:border-primary w-6 h-6 rounded-full flex items-center justify-center" title="HR System Active Pointer">
+              <div className="w-1.5 h-1.5 bg-white rounded-full animate-pulse" />
             </div>
-          </div>
-          <div
-            className={`absolute bottom-3 right-3 w-6 h-6 border-4 border-white dark:border-[#1A0F1E] rounded-full ${profile.isActive ? "bg-emerald-500" : "bg-red-500"}`}
-          />
-        </div>
-
-        <div className="flex-1 text-center md:text-left mb-2">
-          <h1 className="text-3xl md:text-4xl font-bold tracking-tight mb-2 text-primary dark:text-white">
-            {profile.name}
-          </h1>
-          <div className="flex flex-wrap items-center justify-center md:justify-start gap-3">
-            <span className="px-4 py-1.5 rounded-full text-xs font-bold uppercase tracking-wider bg-magenta/10 text-magenta border border-magenta/20">
-              {profile.role?.replace("_", " ")}
-            </span>
-            <span className="text-secondary dark:text-gray-400 font-medium flex items-center gap-1.5">
-              <svg
-                className="w-4 h-4"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"
-                />
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"
-                />
-              </svg>
-              {profile.city || "Unknown Location"}
-            </span>
-          </div>
-        </div>
-
-        <div className="flex gap-3 w-full md:w-auto">
-          {!isEditing ? (
-            <button
-              onClick={onToggleEdit}
-              className="flex-1 md:flex-none py-3 px-8 rounded-xl font-bold text-sm bg-primary dark:bg-white text-white dark:text-primary shadow-lg shadow-primary/20 hover:shadow-xl hover:scale-[1.02] transition-all"
-            >
-              Edit Profile
-            </button>
-          ) : (
-            <>
-              <button
-                onClick={onToggleEdit}
-                className="flex-1 md:flex-none py-3 px-6 rounded-xl font-bold text-sm bg-gray-100 dark:bg-white/10 text-secondary dark:text-white hover:bg-gray-200 transition-all"
-              >
-                Cancel
-              </button>
-              <button
-                onClick={onSave}
-                className="flex-1 md:flex-none py-3 px-8 rounded-xl font-bold text-sm bg-magenta text-white shadow-lg shadow-magenta/30 hover:shadow-magenta/50 hover:scale-[1.02] transition-all"
-              >
-                Save
-              </button>
-            </>
           )}
         </div>
+
+        {/* Core Title Stack */}
+        <div className="flex-1 text-center md:text-left space-y-3">
+          <div className="flex flex-wrap items-center justify-center md:justify-start gap-3">
+            <h1 className="text-2xl md:text-3xl font-extrabold tracking-tight text-gray-900 dark:text-white font-sans">
+              {name}
+            </h1>
+            <span className="inline-flex items-center gap-1.5 px-3 py-0.5 rounded-full text-xs font-bold bg-brand-blue/10 text-brand-blue dark:text-blue-400 border border-brand-blue/20 shadow-sm">
+              <ShieldCheck size={12} /> Master HR Admin
+            </span>
+          </div>
+
+          <p className="text-sm font-semibold uppercase tracking-widest text-brand-blue dark:text-gray-400">
+            {position}
+          </p>
+        </div>
+      </div>
+
+      {/* ─── BOTTOM BLOCK: METADATA DETAILS GRID ─── */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 text-sm">
+
+        {/* Column Module: System HR Identifier */}
+        <div className="space-y-1.5 p-4 rounded-xl bg-gray-50/50 dark:bg-secondary/20 border border-gray-100 dark:border-gray-800/50">
+          <span className="text-xs font-bold uppercase tracking-wider text-gray-400 dark:text-gray-500 flex items-center gap-1.5">
+            <ShieldCheck size={14} className="text-brand-green" /> Core System ID
+          </span>
+          <div className="font-mono font-bold text-brand-blue text-sm bg-white dark:bg-primary px-2.5 py-1 rounded border border-gray-200 dark:border-gray-800 w-fit">
+            {idCode || "N/A"}
+          </div>
+        </div>
+
+        {/* Column Module: Employee Code Reference */}
+        <div className="space-y-1.5 p-4 rounded-xl bg-gray-50/50 dark:bg-secondary/20 border border-gray-100 dark:border-gray-800/50">
+          <span className="text-xs font-bold uppercase tracking-wider text-gray-400 dark:text-gray-500 flex items-center gap-1.5">
+            <User size={14} className="text-gray-400" /> Employee Code
+          </span>
+          <div className="font-semibold text-gray-990 dark:text-white text-base pt-0.5 pl-0.5">
+            {employeeCode}
+          </div>
+        </div>
+
+        {/* Column Module: Registered Communication Email */}
+        <div className="space-y-1.5 p-4 rounded-xl bg-gray-50/50 dark:bg-secondary/20 border border-gray-100 dark:border-gray-800/50 sm:col-span-2 lg:col-span-1">
+          <span className="text-xs font-bold uppercase tracking-wider text-gray-400 dark:text-gray-500 flex items-center gap-1.5">
+            <Mail size={14} className="text-gray-400" /> Email Parameter
+          </span>
+          <div className="font-medium text-gray-700 dark:text-gray-300 truncate pt-0.5 pl-0.5" title={email}>
+            {email}
+          </div>
+        </div>
+
+        {/* Column Module: Corporate Assigned Department */}
+        <div className="space-y-1.5 p-4 rounded-xl bg-gray-50/50 dark:bg-secondary/20 border border-gray-100 dark:border-gray-800/50">
+          <span className="text-xs font-bold uppercase tracking-wider text-gray-400 dark:text-gray-500 flex items-center gap-1.5">
+            <Building2 size={14} className="text-gray-400" /> Operational Department
+          </span>
+          <div className="font-semibold text-gray-800 dark:text-gray-200 text-base pt-0.5 pl-0.5">
+            {department}
+          </div>
+        </div>
+
+        {/* Column Module: Account Employment Status */}
+        <div className="space-y-1.5 p-4 rounded-xl bg-gray-50/50 dark:bg-secondary/20 border border-gray-100 dark:border-gray-800/50">
+          <span className="text-xs font-bold uppercase tracking-wider text-gray-400 dark:text-gray-500 flex items-center gap-1.5">
+            <Activity size={14} className="text-gray-400" /> Lifecycle Status
+          </span>
+          <div className="pt-0.5 pl-0.5">
+            <span className={`inline-flex items-center gap-1 px-2.5 py-0.5 rounded text-xs font-bold border ${status?.toUpperCase() === "ACTIVE"
+                ? "bg-emerald-50 dark:bg-emerald-950/20 text-emerald-700 dark:text-emerald-400 border-emerald-200 dark:border-emerald-900/30"
+                : "bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-400 border-gray-200 dark:border-gray-700"
+              }`}>
+              <div className={`w-1 h-1 rounded-full ${status?.toUpperCase() === "ACTIVE" ? "bg-emerald-500" : "bg-gray-400"}`} />
+              {status}
+            </span>
+          </div>
+        </div>
+
       </div>
     </div>
   );

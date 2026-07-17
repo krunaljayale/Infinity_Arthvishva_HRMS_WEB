@@ -14,7 +14,7 @@ function FeaturesSection() {
 
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                 {/* Card 1: Analytics */}
-                <div className="col-span-1 md:col-span-2 bg-gray-50 dark:bg-white/5 rounded-3xl p-8 border border-gray-200 dark:border-white/10 hover:border-primary/50 transition-colors group">
+                <div className="col-span-1 md:col-span-2 bg-gray-50 dark:bg-white/5 rounded-3xl p-8 border border-gray-200 dark:border-white/10 hover:border-brand-blue/50 transition-colors group">
                     <div className="h-12 w-12 bg-blue-100 dark:bg-blue-900/30 rounded-xl flex items-center justify-center text-blue-600 dark:text-blue-400 mb-6 group-hover:scale-110 transition-transform">
                         <ChartIcon className="w-6 h-6" />
                     </div>
@@ -37,7 +37,7 @@ function FeaturesSection() {
                 </div>
 
                 {/* Card 2: Security */}
-                <div className="bg-gray-50 dark:bg-white/5 rounded-3xl p-8 border border-gray-200 dark:border-white/10 hover:border-magenta/50 transition-colors group">
+                <div className="bg-gray-50 dark:bg-white/5 rounded-3xl p-8 border border-gray-200 dark:border-white/10 hover:border-brand-green/50 transition-colors group">
                     <div className="h-12 w-12 bg-purple-100 dark:bg-purple-900/30 rounded-xl flex items-center justify-center text-purple-600 dark:text-purple-400 mb-6 group-hover:scale-110 transition-transform">
                         <ShieldIcon className="w-6 h-6" />
                     </div>
@@ -49,7 +49,7 @@ function FeaturesSection() {
                 </div>
 
                 {/* Card 3: Automation */}
-                <div className="bg-gray-50 dark:bg-white/5 rounded-3xl p-8 border border-gray-200 dark:border-white/10 hover:border-green/50 transition-colors group">
+                <div className="bg-gray-50 dark:bg-white/5 rounded-3xl p-8 border border-gray-200 dark:border-white/10 hover:border-brand-blue/50 transition-colors group">
                     <div className="h-12 w-12 bg-green-100 dark:bg-green-900/30 rounded-xl flex items-center justify-center text-green-600 dark:text-green-400 mb-6 group-hover:scale-110 transition-transform">
                         <CheckIcon className="w-6 h-6" />
                     </div>
@@ -60,7 +60,7 @@ function FeaturesSection() {
                 </div>
 
                 {/* Card 4: Speed & UX */}
-                <div className="col-span-1 md:col-span-2 bg-gray-50 dark:bg-white/5 rounded-3xl p-8 border border-gray-200 dark:border-white/10 hover:border-yellow/50 transition-colors flex flex-col md:flex-row items-center gap-8">
+                <div className="col-span-1 md:col-span-2 bg-gray-50 dark:bg-white/5 rounded-3xl p-8 border border-gray-200 dark:border-white/10 hover:border-brand-green/50 transition-colors flex flex-col md:flex-row items-center gap-8">
                     <div className="flex-1">
                         <div className="h-12 w-12 bg-yellow-100 dark:bg-yellow-900/30 rounded-xl flex items-center justify-center text-yellow-600 dark:text-yellow-400 mb-6">
                             <ZapIcon className="w-6 h-6" />

@@ -5,10 +5,10 @@ function HeroSection() {
     return (
         <div className="flex-1 flex flex-col items-center relative">
             {/* Version Badge */}
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-lavender/10 border border-lavender/20 text-magenta text-xs font-bold uppercase tracking-wider mb-8 animate-fade-in-up">
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-brand-blue/10 border border-brand-blue/20 text-brand-blue text-xs font-bold uppercase tracking-wider mb-8 animate-fade-in-up">
                 <span className="relative flex h-2 w-2">
-                    <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-magenta opacity-75"></span>
-                    <span className="relative inline-flex rounded-full h-2 w-2 bg-magenta"></span>
+                    <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-brand-green opacity-75"></span>
+                    <span className="relative inline-flex rounded-full h-2 w-2 bg-brand-green"></span>
                 </span>
                 IA HRMS V3.0 is live
             </div>
@@ -16,7 +16,7 @@ function HeroSection() {
             {/* Main Heading */}
             <h1 className="text-5xl md:text-7xl lg:text-8xl font-extrabold text-center tracking-tight mb-6 max-w-5xl leading-[1.1]">
                 People Operations <br className="hidden md:block" />
-                <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary via-magenta to-primary bg-300% animate-gradient">
+                <span className="text-transparent bg-clip-text bg-gradient-to-r from-brand-blue to-brand-green bg-300% animate-gradient">
                     Simplified.
                 </span>
             </h1>
@@ -30,7 +30,7 @@ function HeroSection() {
             <div className="flex flex-col sm:flex-row gap-4 w-full sm:w-auto px-4">
                 <Link
                     href="/dashboard"
-                    className="h-12 px-8 rounded-full bg-primary text-white dark:bg-white dark:text-black font-semibold flex items-center justify-center gap-2 hover:translate-y-[-2px] transition-all shadow-xl shadow-primary/20 dark:shadow-white/5 w-full sm:w-auto"
+                    className="h-12 px-8 rounded-full bg-gradient-to-r from-brand-blue to-brand-green  text-white dark:bg-white dark:text-black font-semibold flex items-center justify-center gap-2 hover:translate-y-[-2px] transition-all shadow-xl shadow-primary/20 dark:shadow-white/5 w-full sm:w-auto"
                 >
                     Launch Workspace <ArrowRightIcon className="w-4 h-4" />
                 </Link>
@@ -41,7 +41,7 @@ function HeroSection() {
 
             {/* Dashboard Mockup Graphic */}
             <div className="mt-20 relative w-full max-w-6xl mx-auto perspective-1000">
-                <div className="absolute -inset-4 bg-gradient-to-r from-primary to-magenta opacity-20 blur-2xl rounded-[3rem] -z-10"></div>
+                <div className="absolute -inset-4 bg-gradient-to-r from-primary to-brand-blue opacity-20 blur-2xl rounded-[3rem] -z-10"></div>
 
                 <div className="relative bg-white dark:bg-[#0F0F11] rounded-2xl border border-gray-200 dark:border-white/10 shadow-2xl overflow-hidden aspect-[16/9] md:aspect-[21/9] transform rotate-x-12 transition-transform duration-500 hover:rotate-x-0 group">
 

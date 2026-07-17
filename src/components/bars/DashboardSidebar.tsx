@@ -115,7 +115,7 @@ export default function DashboardSidebar() {
                                                 href={item.url}
                                                 onClick={closeMobileMenu}
                                                 className={`flex items-center gap-3 w-full px-4 py-3 rounded-xl text-sm font-medium transition-all duration-200 ${isActive
-                                                    ? "bg-primary text-white dark:bg-white dark:text-primary shadow-md"
+                                                    ? "bg-gradient-to-r from-brand-blue to-brand-green text-white dark:bg-white dark:text-primary shadow-md"
                                                     : "text-secondary dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-white/5 hover:text-primary dark:hover:text-white"
                                                     }`}
                                             >

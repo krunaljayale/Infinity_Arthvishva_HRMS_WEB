@@ -61,6 +61,8 @@ export function usePayrollDashboard(initialUserId: string) {
     // ─── REIMBURSEMENT DRAWER STATE ───
     const [selectedReimbursements, setSelectedReimbursements] = useState<any[]>([]);
     const [isReimbursementDrawerOpen, setIsReimbursementDrawerOpen] = useState(false);
+    const [isExporting, setIsExporting] = useState(false);
+    const [isDownloadingSlip, setIsDownloadingSlip] = useState<string | null>(null);
 
     useEffect(() => {
         const handler = setTimeout(() => {
@@ -90,7 +92,7 @@ export function usePayrollDashboard(initialUserId: string) {
 
     const fetchPayrolls = useCallback(async () => {
         const trimmedSearch = debouncedSearch.trim();
-        setIsLoading(true);
+        // setIsLoading(true);
         try {
             const params: GetPayrollParams = {
                 page,
@@ -164,6 +166,61 @@ export function usePayrollDashboard(initialUserId: string) {
         setTimeout(() => setSelectedReimbursements([]), 300);
     };
 
+    const handleExportExcel = async () => {
+        setIsExporting(true);
+        try {
+            const blob = await payrollService.exportPayrollExcel(
+                cycleData.targetMonth,
+                cycleData.targetYear
+            );
+
+            const url = window.URL.createObjectURL(new Blob([blob]));
+            const link = document.createElement('a');
+            link.href = url;
+
+            // Use the exact start and end dates from your cycleData object
+            const fileName = `Payroll_Summary_${cycleData.startDate}_to_${cycleData.endDate}.xlsx`;
+
+            link.setAttribute('download', fileName);
+
+            document.body.appendChild(link);
+            link.click();
+            link.parentNode?.removeChild(link);
+
+        } catch (error) {
+            console.error("Failed to export Excel:", error);
+            alert("Failed to export Excel. Please try again.");
+        } finally {
+            setIsExporting(false);
+        }
+    };
+
+    // Add employeeId as the 3rd parameter
+    const handleDownloadSlip = async (payrollId: string, employeeName: string, employeeId: string) => {
+        setIsDownloadingSlip(payrollId);
+        try {
+            // Pass the employeeId to the service
+            const blob = await payrollService.downloadSalarySlipPdf(payrollId, employeeId);
+
+            const url = window.URL.createObjectURL(new Blob([blob], { type: 'application/pdf' }));
+            const link = document.createElement('a');
+            link.href = url;
+
+            const formattedName = employeeName.trim().replace(/\s+/g, '_');
+            link.setAttribute('download', `SalarySlip_${formattedName}.pdf`);
+
+            document.body.appendChild(link);
+            link.click();
+            link.parentNode?.removeChild(link);
+
+        } catch (error) {
+            console.error("Failed to download salary slip:", error);
+            alert("Failed to download salary slip. Please try again.");
+        } finally {
+            setIsDownloadingSlip(null);
+        }
+    };
+
     return {
         payrolls,
         pagination,
@@ -178,6 +235,10 @@ export function usePayrollDashboard(initialUserId: string) {
         limit,
         setLimit,
         handleProcessAll,
+        isExporting,
+        handleExportExcel,
+        isDownloadingSlip,
+        handleDownloadSlip,
 
         selectedSlip,
         isDrawerOpen,

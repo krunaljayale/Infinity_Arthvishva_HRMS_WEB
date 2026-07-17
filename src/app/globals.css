@@ -53,3 +53,26 @@ body {
   color: var(--color-text-base);
   font-family: var(--font-sans);
 }
+
+@layer base {
+  ::-webkit-scrollbar {
+    width: 8px;
+    height: 5px;
+  }
+  ::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  ::-webkit-scrollbar-thumb {
+    background: linear-gradient(to bottom, #2076C7, #1CADA3); 
+    border-radius: 10px;
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    background: linear-gradient(to bottom, #185E9F, #158C84);
+  }
+  ::-webkit-scrollbar-thumb:horizontal {
+    background: linear-gradient(to right, #2076C7, #1CADA3);
+  }
+  ::-webkit-scrollbar-thumb:horizontal:hover {
+    background: linear-gradient(to right, #185E9F, #158C84);
+  }
+}

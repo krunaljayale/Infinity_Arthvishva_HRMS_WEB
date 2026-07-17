@@ -24,7 +24,6 @@ export const payrollService = {
 
     // Triggers the batch processing loop for all active employees
     processAllActive: async (fromDate: string, toDate: string, month: number, year: number, processedById: string) => {
-        // Swapped axios.post for apiClient.post to pass token verification smoothly
         const response = await apiClient.post(HR_API.PROCESS_ALL_ACTIVE_PAYROLL, {
             fromDate,
             toDate,
@@ -32,6 +31,23 @@ export const payrollService = {
             targetYear: year,
             processedById,
         });
-        return response.data; // Expected structure: { totalProcessed, successful, failed, errors }
+        return response.data;
+    },
+
+    exportPayrollExcel: async (month: number, year: number) => {
+        const response = await apiClient.get(HR_API.EXPORT_PAYROLL, {
+            params: { targetMonth: month, targetYear: year },
+            responseType: 'blob',
+        });
+        return response.data;
+    },
+
+    // Add this to your exported service object
+    downloadSalarySlipPdf: async (payrollId: string, employeeId: string) => {
+        const response = await apiClient.get(HR_API.DOWNLOAD_SALARY_SLIP_PDF(payrollId), {
+            params: { employeeId },
+            responseType: 'blob',
+        });
+        return response.data;
     },
 };

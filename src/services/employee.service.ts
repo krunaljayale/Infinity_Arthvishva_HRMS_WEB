@@ -66,11 +66,11 @@ export const employeeService = {
     },
 
     async updateEmployee(id: string, formDataPayload: FormData) {
-        const response = await apiClient.put(`/api/web/hr/employees/${id}`, formDataPayload, {
+        const response = await apiClient.put(HR_API.UPDATE_EMPLOYEE(id), formDataPayload, {
             headers: {
                 'Content-Type': 'multipart/form-data',
             },
-            timeout: 30000, // Safe buffer window for file updates
+            timeout: 30000,
         });
         return response.data;
     }

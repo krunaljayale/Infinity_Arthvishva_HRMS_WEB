@@ -1,6 +1,6 @@
 "use client";
 
-import { Search, Eye, Download, ChevronRight } from "lucide-react";
+import { Search, Download, ChevronRight } from "lucide-react";
 import GradientButton from "@/components/buttons/GradientButton";
 import PageTitleHeader from "@/components/elements/PageTitleHeader";
 import { usePayrollDashboard } from "@/hooks/payroll-hooks/usePayrollDashboard";
@@ -19,6 +19,10 @@ export default function PayrollDashboard({ currentUserId }: PayrollDashboardProp
         search,
         setSearch,
         handleProcessAll,
+        isExporting,
+        handleExportExcel,
+        isDownloadingSlip,
+        handleDownloadSlip,
 
         selectedSlip,
         isDrawerOpen,
@@ -63,6 +67,8 @@ export default function PayrollDashboard({ currentUserId }: PayrollDashboardProp
 
     return (
         <div className="w-full mx-auto p-6 md:p-8 space-y-8 font-sans relative overflow-hidden">
+
+
             <PageTitleHeader
                 title="Payroll Dashboard"
                 description="Manage payroll, view reports, and handle employee payments efficiently."
@@ -71,8 +77,9 @@ export default function PayrollDashboard({ currentUserId }: PayrollDashboardProp
             <div className="flex-1 w-full bg-white dark:bg-primary rounded-2xl shadow-[0_2px_10px_rgba(0,0,0,0.02)] dark:shadow-none border border-gray-100 dark:border-gray-800 p-6 transition-colors duration-300">
 
                 {/* ─── FILTERS CONTAINER ─── */}
-                <div className="bg-white dark:bg-primary p-4 rounded-xl mb-6 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-6 gap-4 items-center border border-gray-100 dark:border-gray-800 shadow-sm transition-colors duration-300">
-                    <div className="lg:col-span-2 relative flex items-center h-full">
+                <div className="bg-white dark:bg-primary p-4 rounded-xl mb-6 flex flex-col lg:flex-row gap-4 items-center border border-gray-100 dark:border-gray-800 shadow-sm transition-colors duration-300">
+
+                    <div className="relative flex items-center h-full flex-1 w-full">
                         <div className="absolute left-3 flex items-center pointer-events-none text-gray-400 dark:text-gray-500">
                             <Search size={16} />
                         </div>
@@ -85,11 +92,11 @@ export default function PayrollDashboard({ currentUserId }: PayrollDashboardProp
                         />
                     </div>
 
-                    <div className="lg:col-span-1 h-full flex items-center">
+                    <div className="h-full flex items-center w-full lg:w-auto">
                         <select
                             value={selectedYear}
                             onChange={(e) => setSelectedYear(Number(e.target.value))}
-                            className="w-full px-3 py-2 border border-gray-200 dark:border-gray-800 rounded-lg text-sm bg-gray-50 dark:bg-white/5 text-primary dark:text-white transition-colors focus:outline-none focus:ring-2 focus:ring-brand-green cursor-pointer font-medium leading-5"
+                            className="w-full lg:w-auto px-3 py-2 border border-gray-200 dark:border-gray-800 rounded-lg text-sm bg-gray-50 dark:bg-white/5 text-primary dark:text-white transition-colors focus:outline-none focus:ring-2 focus:ring-brand-green cursor-pointer font-medium leading-5"
                         >
                             {yearOptions.map((y) => (
                                 <option key={y} value={y} className="dark:bg-primary">{y}</option>
@@ -97,11 +104,11 @@ export default function PayrollDashboard({ currentUserId }: PayrollDashboardProp
                         </select>
                     </div>
 
-                    <div className="lg:col-span-2 h-full flex items-center">
+                    <div className="h-full flex items-center w-full lg:w-auto">
                         <select
                             value={selectedMonth}
                             onChange={(e) => setSelectedMonth(Number(e.target.value))}
-                            className="w-full px-3 py-2 border border-gray-200 dark:border-gray-800 rounded-lg text-sm bg-gray-50 dark:bg-white/5 text-primary dark:text-white transition-colors focus:outline-none focus:ring-2 focus:ring-brand-green cursor-pointer font-medium leading-5"
+                            className="w-full lg:w-auto min-w-[240px] px-3 py-2 border border-gray-200 dark:border-gray-800 rounded-lg text-sm bg-gray-50 dark:bg-white/5 text-primary dark:text-white transition-colors focus:outline-none focus:ring-2 focus:ring-brand-green cursor-pointer font-medium leading-5"
                         >
                             {monthOptions.map((m) => (
                                 <option key={m.value} value={m.value} className="dark:bg-primary">
@@ -111,15 +118,26 @@ export default function PayrollDashboard({ currentUserId }: PayrollDashboardProp
                         </select>
                     </div>
 
-                    <div className="lg:col-span-1 flex lg:justify-end items-center h-full">
-                        <GradientButton onClick={handleProcessAll} className="w-full lg:w-auto py-2 text-sm" disabled={isProcessing}>
+                    <div className="flex justify-end items-center gap-3 w-full lg:w-auto shrink-0">
+                        <button
+                            onClick={handleExportExcel}
+                            disabled={isExporting}
+                            className="bg-slate-100 hover:bg-slate-200 text-slate-700 px-4 py-2 rounded-lg text-sm font-medium transition-colors whitespace-nowrap h-[40px] flex items-center justify-center"
+                        >
+                            {isExporting ? 'Exporting...' : 'Export to Excel'}
+                        </button>
+                        <GradientButton
+                            onClick={handleProcessAll}
+                            className="w-full lg:w-auto px-6 py-2 text-sm whitespace-nowrap h-[40px] flex items-center justify-center"
+                            disabled={isProcessing}
+                        >
                             {isProcessing ? "Processing..." : "Process all"}
                         </GradientButton>
                     </div>
                 </div>
 
-                {/* ─── DATA TABLE ─── */}
-                <div className="bg-white dark:bg-primary border border-transparent dark:border-gray-800 shadow-sm rounded-b-xl overflow-x-auto transition-colors duration-300 mb-6">
+                {/* ─── DATA TABLE (with horizontal scrollbar tailwind classes) ─── */}
+                <div className="bg-white dark:bg-primary border border-transparent dark:border-gray-800 shadow-sm rounded-b-xl overflow-x-auto transition-colors duration-300 mb-6 [&::-webkit-scrollbar]:h-2 [&::-webkit-scrollbar-track]:bg-transparent [&::-webkit-scrollbar-thumb]:bg-gradient-to-r [&::-webkit-scrollbar-thumb]:from-brand-blue [&::-webkit-scrollbar-thumb]:to-brand-green [&::-webkit-scrollbar-thumb]:rounded-full">
                     <table className="w-full text-left border-collapse whitespace-nowrap">
                         <thead>
                             <tr className="bg-gray-50 dark:bg-secondary border-b border-gray-200 dark:border-gray-800 text-xs text-gray-500 dark:text-gray-400 uppercase tracking-wider font-semibold transition-colors duration-300">
@@ -133,16 +151,17 @@ export default function PayrollDashboard({ currentUserId }: PayrollDashboardProp
                                 <th className="p-4">Reimbursements</th>
                                 <th className="p-4">Deductions</th>
                                 <th className="p-4">Net Salary</th>
+                                <th className="p-4">Actions</th>
                             </tr>
                         </thead>
                         <tbody className="divide-y divide-gray-100 dark:divide-gray-800 text-primary dark:text-white transition-colors duration-300">
                             {isLoading ? (
                                 <tr>
-                                    <td colSpan={10} className="p-8 text-center text-sm text-gray-400">Loading payroll entries...</td>
+                                    <td colSpan={11} className="p-8 text-center text-sm text-gray-400">Loading payroll entries...</td>
                                 </tr>
                             ) : payrolls.length === 0 ? (
                                 <tr>
-                                    <td colSpan={10} className="p-8 text-center text-sm text-gray-400">No records found matching filters.</td>
+                                    <td colSpan={11} className="p-8 text-center text-sm text-gray-400">No records found matching filters.</td>
                                 </tr>
                             ) : (
                                 payrolls.map((slip: any) => (
@@ -181,12 +200,10 @@ export default function PayrollDashboard({ currentUserId }: PayrollDashboardProp
                                                     onClick={() => openReimbursementDrawer(slip.reimbursementsList)}
                                                     className="flex items-center gap-2 cursor-pointer group/reimb w-fit"
                                                 >
-                                                    {/* Value with subtle interactive border text */}
                                                     <span className="font-semibold text-gray-900 dark:text-white border-b border-dashed border-gray-300 dark:border-gray-600 group-hover/reimb:border-blue-500 group-hover/reimb:text-blue-600 dark:group-hover/reimb:text-blue-400 transition-colors">
                                                         ₹{slip.earnings?.reimbursements?.toLocaleString() || 0}
                                                     </span>
 
-                                                    {/* Minimalistic receipt item count badge */}
                                                     <span className="text-[10px] font-bold px-1.5 py-0.5 rounded bg-gray-50 dark:bg-white/5 text-gray-500 dark:text-gray-400 border border-gray-200 dark:border-gray-800 group-hover/reimb:bg-blue-50 dark:group-hover/reimb:bg-blue-900/20 group-hover/reimb:text-blue-600 dark:group-hover/reimb:text-blue-400 group-hover/reimb:border-blue-100 dark:group-hover/reimb:border-blue-900/30 transition-all">
                                                         {slip.reimbursementsList.length}
                                                     </span>
@@ -200,6 +217,23 @@ export default function PayrollDashboard({ currentUserId }: PayrollDashboardProp
                                         </td>
                                         <td className="p-4 font-bold text-emerald-600 dark:text-emerald-400 text-base">
                                             ₹{slip.netSalary?.toLocaleString() || 0}
+                                        </td>
+                                        <td className="p-4">
+                                            <button
+                                                onClick={(e) => {
+                                                    e.stopPropagation();
+                                                    handleDownloadSlip(slip._id, slip.employeeName, slip.employeeId._id);
+                                                }}
+                                                disabled={isDownloadingSlip === slip._id}
+                                                className="flex items-center gap-2 px-3 py-1.5 cursor-pointer text-sm font-medium text-brand-primary bg-brand-primary/10 hover:bg-brand-primary/20 rounded-md transition-colors disabled:opacity-50"
+                                            >
+                                                {isDownloadingSlip === slip._id ? (
+                                                    <span className="animate-spin">⏳</span>
+                                                ) : (
+                                                    <Download size={16} />
+                                                )}
+                                                {isDownloadingSlip === slip._id ? 'Downloading...' : 'PDF'}
+                                            </button>
                                         </td>
                                     </tr>
                                 ))

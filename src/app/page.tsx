@@ -7,11 +7,11 @@ import HeroSection from "@/components/sections/home/HeroSection";
 
 export default function Home() {
   return (
-    <div className="min-h-screen bg-background w-full flex flex-col font-sans text-primary dark:text-white transition-colors duration-300 overflow-x-hidden selection:bg-lavender/30">
+    <div className="min-h-screen bg-background w-full flex flex-col font-sans text-primary dark:text-white transition-colors duration-300 overflow-x-hidden selection:bg-brand-blue/30">
       <div className="fixed inset-0 -z-10 h-full w-full bg-white dark:bg-[#0a0a0a] bg-[radial-gradient(#e5e7eb_1px,transparent_1px)] dark:bg-[radial-gradient(#ffffff33_1px,transparent_1px)] [background-size:16px_16px]">
         <div className="absolute inset-0 bg-white/50 dark:bg-black/80 [mask-image:radial-gradient(ellipse_at_center,transparent_20%,black)]"></div>
       </div>
-      <div className="fixed top-0 left-1/2 -translate-x-1/2 w-[800px] h-[400px] bg-magenta/20 blur-[120px] rounded-full pointer-events-none -z-10 opacity-50 dark:opacity-20" />
+      <div className="fixed top-0 left-1/2 -translate-x-1/2 w-[800px] h-[400px] bg-brand-blue/20 blur-[120px] rounded-full pointer-events-none -z-10 opacity-50 dark:opacity-20" />
 
       <HomeNavbar />
 
